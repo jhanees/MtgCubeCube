@@ -9,7 +9,7 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput
 from Cubing import cubemode
 
 #initializes the ini File
@@ -99,9 +99,8 @@ def editmode(filename):
         print("Filename " + filename + " does not exist")
     else:
         file = open("archetypes/" + filename, "r")
-        cards = file.readlines()
-        for i in range(len(cards)):
-            cards[i] = cards[i][:len(cards[i])-1]
+        cardsPlus = file.readlines()
+        cards = list(map(dropLastLetter,cardsPlus))
         print("Archetype currently consists of " + str(len(cards)) + " cards.")
         file.close()
         print("Edit options:\ndisplay | displays the archetype\nlist | lists the archetype\nremove _cardname_ | removes _cardname from the archetype\nadd _cardname_ | adds _cardname_\nreplace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\ndone | ends edit mode")
@@ -193,7 +192,7 @@ def editmode(filename):
                         object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
-                    cards.append(info)
+                        cards.append(info)
         file = open("archetypes/" + filename, "w")
         for c in cards:
             file.write(c + "\n")
@@ -216,14 +215,27 @@ if __name__ == "__main__":
         archetypes, cubes = initialize()
                 
     #state options in console
-    print("Options:\nwrite _filename_ | puts you into write file mode to create the archetype _filename_\nedit _filename_ | reads the archetype _filename_ and gives you options to change it\ndisplay _filename_ _size_ | displays pictures of all cards in _filename_, downloads pictures from scryfall if needed. _size_ is optional if you want to only display _size_ pictures at a time\ncube _cubename_ | puts you into cubemode\nstop | ends the script\n")
+    Options = ["Options:", 
+               "write _filename_ | puts you into write file mode to create the archetype _filename_",
+               "edit _filename_ | reads the archetype _filename_ and gives you options to change it",
+               "display _filename_ [size] | displays pictures of all cards in _filename_, downloads pictures from scryfall if needed. [size] puts number of cards displayed to [size] cards at a time",
+               "cube _cubename_ | puts you into cubemode",
+               "archetypes | lists all archetypes",
+               "stop | ends the script"]
+    for o in Options:
+        print(o)
     #listen to commands
+    prefill = ""
     while(True):
-        inputString = input("Command: ")
+        #reads line with potential prefill from prior commands
+        inputString = rlinput("Command: ", prefill)
+        #checks if command ends the script
         if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
             break
-        #checks for write file mode
-        if(inputString.startswith("archetypes")):
+        #boolean variable to check whether command was recognized or if set to false user gets option to edit input
+        recognizedCommand = True
+        #check for all command options
+        if(inputString.startswith("archetypes") or inputString.startswith("a")):
             print(archetypes)
         elif(inputString.startswith("cube ") or inputString.startswith("c ")):
             i = inputString.find(" ")
@@ -232,20 +244,30 @@ if __name__ == "__main__":
         elif(inputString.startswith("display ") or inputString.startswith("dp ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
-            #find displaysize if input
+            #find _size_ if used in input
             i = inputString.find(" ")
             numStr = "500"
             num = 1000
             if (i != -1):
                 numStr = inputString[(i+1):]
-                inputString = inputString[:i]
-            print("Filename is " + inputString)
+                archetypePrefix = inputString[:i]
+            print("Archetype prefix is " + archetypePrefix)
             try:
                 num = int(numStr)
             except:
                 print("bad input!")
                 num = 1000
-            display(inputString, num)
+            f = []
+            for archetype in archetypes:
+                if(archetype.startswith(archetypePrefix)):
+                    f.append(archetype)
+            if(f != []):
+                print("Archetypes to display are " + str(f))
+            else:
+                print("No archetype starting with " + archetypePrefix + " found")
+                recognizedCommand = False
+            for archetype in f:
+                display(archetype, num)
         elif(inputString.startswith("s ") or inputString.startswith("search ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
@@ -258,24 +280,11 @@ if __name__ == "__main__":
                 for a in archetypes:
                     cards = readArchetype(a)
                     for c in cards:
-                        if c.startswith(info):
+                        if c == info:
                             result.append(a)
                 print(result)
-        elif(inputString.startswith("s+ ") or inputString.startswith("search+ ")):
-            i = inputString.find(" ")
-            inputString = inputString[(i+1):]
-            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString)
-            object,info = analyseObject(x)
-            #if found writes into file
-            if(object == "card"):
-                print("Card name is " + info)
-                result = []
-                for a in archetypes:
-                    cards = readArchetype(a)
-                    for c in cards:
-                        if c.startswith(info):
-                            result.append(a)
-                print(result)
+            else:
+                recognizedCommand = False
         elif(inputString.startswith("write ")  or inputString.startswith("w ")):
             i = inputString.find(" ")
             filename = inputString[(i+1):]
@@ -287,4 +296,11 @@ if __name__ == "__main__":
             filename = inputString[(i+1):]
             print("Filename is " + filename)
             editmode(filename)
+        else:
+            recognizedCommand = False
+        if(recognizedCommand == False):
+            print("Command not recognized")
+            prefill = inputString
+        else:
+            prefill = ""
     updateStatus(archetypes, cubes)

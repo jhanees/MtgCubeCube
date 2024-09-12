@@ -2,9 +2,17 @@ import os.path
 import requests
 import time
 import shutil
+import readline
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
+
+def rlinput(prompt, prefill=''):
+   readline.set_startup_hook(lambda: readline.insert_text(prefill))
+   try:
+      return input(prompt)  # or raw_input in Python 2
+   finally:
+      readline.set_startup_hook()
 
 def fragmentFormat(xaxis, yaxis, total):
     if(xaxis < 1):
@@ -29,6 +37,8 @@ def fragmentFormat(xaxis, yaxis, total):
         return x-1,y
     return x,y
 
+def dropLastLetter(word):
+    return word[:len(word)-1]
 
 def readArchetype(filename):
     if (os.path.exists("archetypes/" + filename) == False):
@@ -36,7 +46,8 @@ def readArchetype(filename):
         return []
     else:
         file = open("archetypes/" + filename, "r")
-        names = file.readlines()
+        namesSpace = file.readlines()
+        names = list(map(dropLastLetter,namesSpace))
         return names
 
 #checks whether x is card or error and searches for additional info
@@ -120,9 +131,11 @@ def displayList(names, size=30):
 
 def display(filename, size = 30):
     if (os.path.exists("archetypes/" + filename) == False):
+        print("$archetypes/" + filename + "$")
         print("Filename does not exist")
     else:
         file = open("archetypes/" + filename, "r")
-        names = file.readlines()
+        namesSpace = file.readlines()
+        names = list(map(dropLastLetter,namesSpace))
         file.close()
         displayList(names, size)

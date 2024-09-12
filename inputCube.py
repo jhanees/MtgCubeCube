@@ -358,6 +358,7 @@ if __name__ == "__main__":
             filename = inputString[(i+1):]
             print("Filename is " + filename)
             writemode(filename)
+            archetypes = archetypes.append(filename)
         elif(inputString.startswith("edit ")  or inputString.startswith("e ")):
             i = inputString.find(" ")
             filename = inputString[(i+1):]
