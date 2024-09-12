@@ -42,7 +42,7 @@ def dropLastLetter(word):
 
 def readArchetype(filename):
     if (os.path.exists("archetypes/" + filename) == False):
-        print("Filename does not exist")
+        print("Filename " + filename + "does not exist")
         return []
     else:
         file = open("archetypes/" + filename, "r")
