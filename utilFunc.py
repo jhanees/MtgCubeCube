@@ -83,10 +83,10 @@ def findAttribute(str, att, subatt=None):
 
 def downloadImage(name):
     time.sleep(0.1)
-    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + name)
+    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + name, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
     url = findAttribute(x.text,"image_uris", "small")
     print(url)
-    x = requests.get(url, stream = True)
+    x = requests.get(url, stream = True, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
     file = open("images/" + name + ".jpg", "wb")
     shutil.copyfileobj(x.raw,file)
     file.close()

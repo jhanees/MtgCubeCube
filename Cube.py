@@ -76,7 +76,7 @@ def writemode(filename):
         if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
             break
         #searches for card
-        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString)
+        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
         object,info = analyseObject(x)
         #if found writes into file
         if(object == "card"):
@@ -86,7 +86,7 @@ def writemode(filename):
             print("Error type is " + info)
             #if not found tries again with exact command if ambiguous
             if(info == "ambiguous"):
-                x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString)
+                x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 object,info = analyseObject(x)
                 if(object == "card"):
                     print("Card name is " + info)
@@ -127,7 +127,7 @@ def editmode(filename):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
                 #searches for card
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname)
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 object,info = analyseObject(x)
                 #if found writes into file
                 if(object == "card"):
@@ -140,7 +140,7 @@ def editmode(filename):
                     print("Error type is " + info)
                     #if not found tries again with exact command if ambiguous
                     if(info == "ambiguous"):
-                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString)
+                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                         object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
@@ -158,10 +158,10 @@ def editmode(filename):
                     cardname2 = cardname[(i+1):]
                     cardname1 = cardname[:i]
                     #searches for card
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname1)
+                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname1, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                     object1,info1 = analyseObject(x)
                     time.sleep(0.1)
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname2)
+                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname2, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                     object2,info2 = analyseObject(x)                
                     #if found writes into file
                     if(object1 == "card" and object2 == "card"):
@@ -179,7 +179,7 @@ def editmode(filename):
             elif(inputString.startswith("add ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname)
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 object,info = analyseObject(x)
                 if(object == "card"):
                     print("Card name is " + info)
@@ -188,7 +188,7 @@ def editmode(filename):
                     print("Error type is " + info)
                     #if not found tries again with exact command if ambiguous
                     if(info == "ambiguous"):
-                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString)
+                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                         object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         elif(inputString.startswith("s ") or inputString.startswith("search ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
-            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString)
+            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
             object,info = analyseObject(x)
             #if found writes into file
             if(object == "card"):
