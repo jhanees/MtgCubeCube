@@ -3,6 +3,7 @@ import requests
 import time
 import shutil
 import readline
+import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
@@ -37,6 +38,114 @@ def fragmentFormat(xaxis, yaxis, total):
         return x-1,y
     return x,y
 
+def Botpick(pack, cardsDrafted):
+    return pack.pop(random.randrange(0,len(pack)))
+
+def makePick(player, pack):
+    (playertype, playername, cardsDrafted) = player
+    if(playertype == "bot"):
+        cardsDrafted.append(Botpick(pack,cardsDrafted))
+    elif(playertype == "local"): 
+        print("\nIt is now your turn to pick.")
+        print("The pack consists of the following cards: " + str(pack))
+        print("Options:\n" +
+              "display1 | displays the pack\n" + 
+              "display2 | displays your drafted cards\n" +
+              "list1 | lists the pack\n" +
+              "list2 | lists your drafted cards\n" +
+              "pick _cardname_ | adds _cardname to your drafted cards and passes the pack.")
+        prefill = ""
+        while(True):
+            inputString = rlinput("Command: ", prefill)
+            prefill=""
+            if(inputString.startswith("display1") or inputString.startswith("d1")):
+                i = inputString.find(" ")
+                numStr = "500"
+                num = 1000
+                if (i != -1):
+                    numStr = inputString[(i+1):]
+                    inputString = inputString[:i]
+                    try:
+                        num = int(numStr)
+                    except:
+                        print("bad input!")
+                        num = 1000
+                displayList(pack,num)
+            elif(inputString.startswith("list1") or inputString.startswith("l1")):
+                print(str(pack))
+            elif(inputString.startswith("display2") or inputString.startswith("d2")):
+                i = inputString.find(" ")
+                numStr = "500"
+                num = 1000
+                if (i != -1):
+                    numStr = inputString[(i+1):]
+                    inputString = inputString[:i]
+                    try:
+                        num = int(numStr)
+                    except:
+                        print("bad input!")
+                        num = 1000
+                displayList(cardsDrafted,num)
+            elif(inputString.startswith("list2") or inputString.startswith("l2")):
+                print(str(cardsDrafted))
+            elif(inputString.startswith("pick ") or inputString.startswith("p ")):
+                i = inputString.find(" ")
+                cardname = inputString[(i+1):]
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                object,info = analyseObject(x)
+                if(object == "card"):
+                    print("Card name is " + info)
+                    if(info in pack):
+                        cardsDrafted.append(info)
+                        pack.remove(info)
+                        break
+                    else:
+                        print("The card \"" + info + "\" is not in this pack")
+                        prefill = inputString
+                else:
+                    print("Error type is " + info)
+                    #if not found tries again with exact command if ambiguous
+                    if(info == "ambiguous"):
+                        time.sleep(0.1)
+                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                        object,info = analyseObject(x)
+                    if(object == "card"):
+                        print("Card name is " + info)
+
+            else:
+                print("Command was not recognized")
+                prefill=inputString
+def draft(packs,players,draftroundnum):
+    if(draftroundnum * len(players) > len(packs)):
+        print("Drafting with " + str(len(players)) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * len(players)) + " packs but there are only " + str(len(packs)) + " packs.")
+        return
+    for roundcount in range(0,draftroundnum):
+        roundparity = roundcount % 2
+        #saves the number of cards drafted for each player
+        playernextpack = []
+        roundpacks = []
+        packnextplayer = []
+        for i in range(len(players)):
+            playernextpack.append(i)
+            packnextplayer.append(i)
+            roundpacks.append(packs.pop(random.randrange(0,len(packs))))
+        print("Test print:\nplayernextpack: " + str(playernextpack) + "\npacknextplayer: " + str(packnextplayer) + "\nroundpacks: " + str(roundpacks))
+        packsDone = 0
+        while(packsDone < len(roundpacks)):
+            for playerind in range(len(players)):
+                if(packnextplayer[playernextpack[playerind]] == playerind):
+                    makePick(players[playerind],roundpacks[playernextpack[playerind]])
+                    if(len(roundpacks[playernextpack[playerind]]) == 0):
+                        packnextplayer[playernextpack[playerind]] = -1
+                        packsDone = packsDone + 1
+                    else:
+                        packnextplayer[playernextpack[playerind]] = (packnextplayer[playernextpack[playerind]] - 1 + 2 * roundparity) % len(players)
+                    playernextpack[playerind] = (playernextpack[playerind] +1- 2 * roundparity) % len(roundpacks)
+            time.sleep(0.1)
+            print("\nTest Print: " + str(packnextplayer) + "\n" + str(playernextpack) + "\n\n")
+                    
+
+        
 def dropLastLetter(word):
     return word[:len(word)-1]
 
@@ -118,14 +227,31 @@ def displayList(names, size=30):
                 myImage[i] = image.imread("images/" + names[i+j*size1][:(tind-1)] + ".jpg")
             else:
                 myImage[i] = image.imread("images/" + names[i+j*size1] + ".jpg")
-            axs[i//x][i % x].set_axis_off()
-            axs[i//x][i % x].get_xaxis().set_visible(False)
-            axs[i//x][i % x].get_yaxis().set_visible(False)
-            axs[i//x][i % x].imshow(myImage[i])
+            if(y == 1):
+                if(x == 1):
+                    axs.set_axis_off()
+                    axs.get_xaxis().set_visible(False)
+                    axs.get_yaxis().set_visible(False)
+                    axs.imshow(myImage[i])
+                else:
+                    axs[i].set_axis_off()
+                    axs[i].get_xaxis().set_visible(False)
+                    axs[i].get_yaxis().set_visible(False)
+                    axs[i].imshow(myImage[i])
+            else:
+                axs[i//x][i % x].set_axis_off()
+                axs[i//x][i % x].get_xaxis().set_visible(False)
+                axs[i//x][i % x].get_yaxis().set_visible(False)
+                axs[i//x][i % x].imshow(myImage[i])
         for i in range(size1,x*y):
-            axs[i//x][i % x].set_axis_off()
-            axs[i//x][i % x].get_xaxis().set_visible(False)
-            axs[i//x][i % x].get_yaxis().set_visible(False)
+            if(y == 1):
+                axs[i].set_axis_off()
+                axs[i].get_xaxis().set_visible(False)
+                axs[i].get_yaxis().set_visible(False)
+            else:
+                axs[i//x][i % x].set_axis_off()
+                axs[i//x][i % x].get_xaxis().set_visible(False)
+                axs[i//x][i % x].get_yaxis().set_visible(False)
         fig.tight_layout(pad=0)
         pyplot.show()
 

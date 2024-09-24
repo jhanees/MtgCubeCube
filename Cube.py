@@ -94,7 +94,7 @@ def writemode(filename):
     #closes file and goes back to default mode
     file.close()
 
-def editmode(filename):
+def editArchetypeMode(filename):
     if (os.path.exists("archetypes/" + filename) == False):
         print("Filename " + filename + " does not exist")
     else:
@@ -103,7 +103,13 @@ def editmode(filename):
         cards = list(map(dropLastLetter,cardsPlus))
         print("Archetype currently consists of " + str(len(cards)) + " cards.")
         file.close()
-        print("Edit options:\ndisplay | displays the archetype\nlist | lists the archetype\nremove _cardname_ | removes _cardname from the archetype\nadd _cardname_ | adds _cardname_\nreplace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\ndone | ends edit mode")
+        print("Edit options:\n" + 
+              "display | displays the archetype\n" + 
+              "list | lists the archetype\n" + 
+              "remove _cardname_ | removes _cardname from the archetype\n" + 
+              "add _cardname_ | adds _cardname_\n" + 
+              "replace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\n" +
+              "done | ends edit mode")
         while(True):
             inputString = input("Edit " + filename + ": ")
             if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
@@ -188,6 +194,7 @@ def editmode(filename):
                     print("Error type is " + info)
                     #if not found tries again with exact command if ambiguous
                     if(info == "ambiguous"):
+                        time.sleep(0.1)
                         x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                         object,info = analyseObject(x)
                     if(object == "card"):
@@ -198,49 +205,47 @@ def editmode(filename):
             file.write(c + "\n")
         file.close()
 
-
-
-if __name__ == "__main__":
-    #init
-    archetypes = []
-    if not os.path.exists("images"):
-        os.makedirs("images")
-    if not os.path.exists("archetypes"):
-        os.makedirs("archetypes")
-    if not os.path.exists("cubes"):
-        os.makedirs("cubes")
-    if not os.path.exists("Cube.ini"):
-        initStatus()
-    else:
-        archetypes, cubes = initialize()
-                
+def editMode(archetypes, cubes):
     #state options in console
-    Options = ["Options:", 
+    Options = ["Edit Mode Options:", 
                "write _filename_ | puts you into write file mode to create the archetype _filename_",
                "edit _filename_ | reads the archetype _filename_ and gives you options to change it",
                "display _filename_ [size] | displays pictures of all cards in _filename_, downloads pictures from scryfall if needed. [size] puts number of cards displayed to [size] cards at a time",
                "cube _cubename_ | puts you into cubemode",
                "archetypes | lists all archetypes",
-               "stop | ends the script"]
+               "options | displays this menu",
+               "back | goes back to the main menu",
+               "quit | ends the programm"]
     for o in Options:
         print(o)
     #listen to commands
     prefill = ""
+    quitBool=False
     while(True):
         #reads line with potential prefill from prior commands
         inputString = rlinput("Command: ", prefill)
+        print("")
         #checks if command ends the script
-        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
+        if (inputString.startswith("q") or inputString.startswith("quit")):
+            quitBool=True
+            break
+        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("back")):
+            quitBool=False
             break
         #boolean variable to check whether command was recognized or if set to false user gets option to edit input
         recognizedCommand = True
         #check for all command options
         if(inputString.startswith("archetypes") or inputString.startswith("a")):
             print(archetypes)
+        elif(inputString.startswith("options") or inputString.startswith("o")):
+            for o in Options:
+                print(o)
         elif(inputString.startswith("cube ") or inputString.startswith("c ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
-            cubemode(inputString, archetypes)
+            cubes = cubemode(inputString, archetypes, cubes)
+            for o in Options:
+                print(o)
         elif(inputString.startswith("display ") or inputString.startswith("dp ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
@@ -295,7 +300,7 @@ if __name__ == "__main__":
             i = inputString.find(" ")
             filename = inputString[(i+1):]
             print("Filename is " + filename)
-            editmode(filename)
+            editArchetypeMode(filename)
         else:
             recognizedCommand = False
         if(recognizedCommand == False):
@@ -304,3 +309,51 @@ if __name__ == "__main__":
         else:
             prefill = ""
     updateStatus(archetypes, cubes)
+    return quitBool
+
+def mainMenu(archetypes, cubes):
+    options = ("Main Menu Options:\n" + 
+            "edit | mode for editing the archetype piles and editing cubes\n" + 
+            "host draft | start hosting an online draft[not implemented yet]\n" + 
+            "join draft | join an online draft[not implemented yet]\n" + 
+            "bot draft | start a bot draft\n" +
+            "options | displays this menu\n" +
+            "quit | ends this programm")
+    print(options)
+    while(True):
+        inputString = input("Command: ")
+        if (inputString.startswith("q")):
+            break
+        #checks for write file mode
+        if(inputString.startswith("o") or inputString.startswith("Options")):
+            print(options)
+        elif(inputString.startswith("e") or inputString.startswith("edit")):
+            quitBool = editMode(archetypes, cubes)
+            if(quitBool):
+                break
+            else:
+                print(options)
+        elif(inputString.startswith("host draft")  or inputString.startswith("hd")):
+            #TODO
+            time.sleep(0.1)
+        elif(inputString.startswith("join draft")  or inputString.startswith("jd")):
+            #TODO
+            time.sleep(0.1)
+        elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
+            #TODO
+            time.sleep(0.1)
+
+if __name__ == "__main__":
+    #init
+    archetypes = []
+    if not os.path.exists("images"):
+        os.makedirs("images")
+    if not os.path.exists("archetypes"):
+        os.makedirs("archetypes")
+    if not os.path.exists("cubes"):
+        os.makedirs("cubes")
+    if not os.path.exists("Cube.ini"):
+        initStatus()
+    else:
+        archetypes, cubes = initialize()
+    mainMenu(archetypes, cubes)

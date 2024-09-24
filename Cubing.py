@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, downloadImage
+from utilFunc import analyseObject, readArchetype, displayList, downloadImage, dropLastLetter, draft
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -21,88 +21,190 @@ def createPacks(cards, packsize=15):
     i = 0
     packs = []
     cubesize = len(cards)
-    while(packsize >= len(cards)):
+    while(packsize <= len(cards)):
         packs.append(getElements(cards,packsize))
     print(f"Created {str(len(packs))} packs of {str(packsize)} cards each from {str(cubesize)} cards in the cube.")
     return packs, cards
 
 def cubing(packs):
-    for p in packs:
-        for c in p:
-            if(os.path.exists("images/" + c + ".jpg") == False):
-                downloadImage(c)
+    playernumberStr = input("Choose number of players:")
+    try:
+        playernumber = int(playernumberStr)
+        if(playernumber < 2):
+            print("Can't draft with fewer than 2 players. Number of players set to 8 by default.")
+            playernumber = 8
+    except:
+        playernumber = 8
+        print("Couldn't parse input. Number of players set to 8 by default.")
+    #we first implement botdraft
+    draftroundnumStr = input("Choose number of draft rounds:")
+    try:
+        draftroundnum = int(draftroundnumStr)
+        if(draftroundnum < 1):
+            print("Can't draft fewer than 1 pack. Number of packs set to 3 by default.")
+            draftroundnum = 3
+    except:
+        draftroundnum = 8
+        print("Couldn't parse input. Number of packs set to 3 by default.")
+    if(draftroundnum * playernumber > len(packs)):
+        print("Drafting with " + str(playernumber) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * playernumber) + " packs but there are only " + str(len(packs)) + " packs.")
+        return
+    yourname = input("\nChoose a Draftername for yourself:")
+    print("Your chosen name is \"" + yourname + "\".")
+    players = []
+    players.append(("local",yourname,[]))
+    i=0
+    while(len(players) < playernumber):
+        players.append(("bot","Bot N°" + str(i),[]))
+        i = i + 1
+    draft(packs,players,draftroundnum)
+
     #print("waiting for players...")
     #listen to join requests and accept players
     
     #
     
-    
+def instantiate(archetypesAdded):
+    cards = []
+    for (a,n) in archetypesAdded:
+        archetypeCards = readArchetype(a)
+        if(archetypeCards != []):
+            if((n >= len(archetypeCards)) or (n == -1)):
+                for card in archetypeCards:
+                    cards.append(card)
+            else:
+                addIndices = random.sample(range(0,len(archetypeCards)),n)
+                for i in addIndices:
+                    cards.append(archetypeCards[i])
+        else:
+            print("Archetype \"" + a + "\" could not be identified. We will skip it.")
+    return cards
 
 def readCube(filename):
     file = open("cubes/" + filename, "r")
-    text = file.read()
-    file.close()
-    archetypes = []
-    cards = []
-    ind = text.find("Cards:\n")
-    if ind == -1:
-        print("Could not initialize Cubes")
+    linesSpace = file.readlines()
+    if(linesSpace[0] == "lazy Cube\n"):
+        cubetype = 1
     else:
-        ind = ind+7
-        x = ""
-        while(text[ind] != ";"):
-            if(text[ind] == ","):
-                cards.append(x)
-                x = ""
-                ind = ind + 2
-            x = x + text[ind]
+        cubetype = 0
+    ind = linesSpace.index("Cards:\n")
+    cardsSpace = []
+    if ind == -1:
+        print("Could not initialize Cards")
+    else:
+        done = False
+        while(done == False):
             ind = ind + 1
-    ind = text.find("Archetypes:\n")
+            if(ind == len(linesSpace)):
+                print("failed to resolve cube correctly. Semicolon missing.")
+                break
+            if(linesSpace[ind].startswith(";")):
+                done = True
+            else:
+                cardsSpace.append(linesSpace[ind])
+    cards = list(map(dropLastLetter,cardsSpace))
+    try:
+        ind = linesSpace.index("Archetypes:\n")
+    except:
+        print(str(linesSpace))
+    archetypesSpace = []
     if ind == -1:
         print("Could not initialize archetypes")
     else:
-        ind = ind+12
-        x = ""
-        while(text[ind] != ";"):
-            if(text[ind] == ","):
-                archetypes.append(x)
-                x = ""
-                ind = ind + 2
-            x = x + text[ind]
+        done = False
+        while(done == False):
             ind = ind + 1
-    print("Cube consists of " + str(len(cards)) + " cards." + str(len(archetypes)) + " archetypes are part of this cube.")
-    return cards, archetypes
+            if(ind == len(linesSpace)):
+                print("failed to resolve cube correctly. Semicolon missing.")
+                break
+            if(linesSpace[ind].startswith(";")):
+                done = True
+            else:
+                archetypesSpace.append(linesSpace[ind])
+    archetypes = list(map(dropLastLetter,archetypesSpace))
+    archetypesAdded = []
+    for a in archetypes:
+        ind = a.find(" ")
+        if(ind != -1):
+            try:
+                cardnumber = int(a[(ind+1):])
+            except:
+                print("bad input!")
+                cardnumber = -1
+            archetype = a[:ind]
+            archetypesAdded.append((archetype, cardnumber))
+        else:
+            archetypesAdded.append((a, -1))
+    if(cubetype == 0):
+        print("This Cube consists of " + str(len(cards)) + " cards and " + str(len(archetypes)) + " archetypes are part of this cube.")
+    if(cubetype == 1):
+        totalcardnumber = 0
+        for (a,n) in archetypes:
+            if(n != -1):
+                totalcardnumber = totalcardnumber + n
+            else:
+                totalcardnumber = totalcardnumber + len(readArchetype(a))
+        print("This is a lazy Cube consisting of " + str(len(archetypes)) + " archetypes which add up to a total of " + str(len(cards) + totalcardnumber) + " yet to be determined cards.")
+    return cubetype, cards, archetypesAdded
 
-def writeCube(cards, archetypes, filename):
+def writeCube(cubetype, cards, archetypes, filename):
     file = open("cubes/" + filename, "w")
+    if cubetype == 0:
+        file.write("eager Cube\n")
+    if cubetype == 1:
+        file.write("lazy Cube\n")
     file.write("Cards:\n")
     for c in cards:
         file.write(c + "\n")
-    file.write(";;")
+    file.write(";;\n")
     file.write("Archetypes:\n")
-    for a in archetypes:
-        file.write(a + "\n")
+    for (a,n) in archetypes:
+        if(n != -1):
+            file.write(a + " " + str(n) + "\n")
+        else:
+            file.write(a + "\n")
     file.write(";;")
     file.close()
 
-def cubemode(filename, archetypes):
+def cubemode(filename, archetypes, cubes):
     cards = []
     archetypesAdded = []
+    cubetype = 0
     if(os.path.exists("cubes/" + filename)):
-        cards, archetypesAdded = readCube(filename)
-        for i in range(len(cards)):
-            cards[i] = cards[i][:len(cards[i])-1]
+        cubetype, cards, archetypesAdded = readCube(filename)
         print("Cube currently consists of " + str(len(cards)) + " cards.")
     else:
         print("New cube " + filename + " created!")
-    print("Cube options:\ndisplay | displays the cube\nlist | lists the cube\nremove _cardname_ | removes _cardname from the cube\nadd _cardname_ | adds _cardname_\nreplace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\ndone |draft _packsize_ | start drafting with packs of size _packsize_, default is 15.\nends cube mode")
+        a = input("\nWhich Cube type do you want this cube to be? Type 0 for a cube with a specific cardlist and 1 for a Cube which randomly selects cards from specified archetypes every time it is drafted. \nCommand:")
+        if(a.startswith("1")):
+            cubetype = 1
+        elif(a.startswith("0")):
+            cubetype = 0
+        else:
+            print("input could not be parsed. Selcting the first option by default.")
+            cubetype = 0
+        cubes.append(filename)
+    Options = ["Cube " + filename + " options:", 
+               "display | displays the cube",
+               "list | lists the cube",
+               "archetypes | displays list of all archetypes and all archetypes in the cube"
+               "addcard _cardname_ | adds _cardname_",
+               "addarchetype _archetype_ [_cardnumber_] | adds _cardnumber_ cards from _archetype_ to the cube. _cardnumber_ is all by default."
+               "remove _cardname_ | removes _cardname from the cube",
+               "replace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_",
+               "draft _packsize_ | start drafting with packs of size _packsize_, default is 15.\nends cube mode",
+               "options | displays this menu",
+               "back | goes back to the main menu",
+               "quit | ends the programm"]
+    for o in Options:
+        print(o)
     while(True):
         inputString = input("Cube " + filename + ": ")
-        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
+        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("back") or inputString.startswith("q ") or inputString.startswith("quit ")):
             break
         if(inputString.startswith("archetypes")):
-            print("All archetypes: " + archetypes)
-            print("Archetypes added so far: " + archetypesAdded)
+            print("All archetypes: " + str(archetypes))
+            print("Archetypes added so far: " + str(archetypesAdded))
         elif(inputString.startswith("display") or inputString.startswith("dp")):
             i = inputString.find(" ")
             numStr = "500"
@@ -186,10 +288,10 @@ def cubemode(filename, archetypes):
                         print("Error type for first card is " + info1 + ".")
                     if(object2 != "card" and object2 != ""):
                         print("Error type for second card is " + info2 + ".")
-        elif(inputString.startswith("add ")):
+        elif(inputString.startswith("addcard ") or inputString.startswith("ac ")):
             i = inputString.find(" ")
             cardname = inputString[(i+1):]
-            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname)
+            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
             object,info = analyseObject(x)
             if(object == "card"):
                 print("Card name is " + info)
@@ -198,60 +300,58 @@ def cubemode(filename, archetypes):
                 print("Error type is " + info)
                 #if not found tries again with exact command if ambiguous
                 if(info == "ambiguous"):
-                    x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString)
+                    x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                     object,info = analyseObject(x)
                 if(object == "card"):
                     print("Card name is " + info)
-                cards.append(info)
-        elif(inputString.startswith("include ") or inputString.startswith("i ")):
+                    cards.append(info)
+        elif(inputString.startswith("addarchetype ") or inputString.startswith("aa ")):
             i = inputString.find(" ")
-            archetype = inputString[(i+1):]
-            #find seperator between archetype and size
-            i = inputString.find(" ")
-            #size equals number of cards to be added. default 10000 equals all
-            size = 10000
+            archetypename = inputString[(i+1):]
+            i = archetypename.find(" ")
+            cardnumber = 1000
             if(i != -1):
-                sizestr = archetype[(i+1):]
-                archetype = archetype[:i]
+                cardnumberStr = archetypename[(i+1):]
+                archetypename = archetypename[:i]
                 try:
-                    size = int(sizestr)
+                    cardnumber = int(cardnumberStr)
                 except:
-                    print("size could not be resolved.")
-                    size = 10000
-            if(not archetypes.contains(archetype)):
-                print("archetype " + archetype + " could not be found")
-            else:
-                list = readArchetype(archetype)
-                if(len(list) <= size):
-                    for e in list:
-                        cards.append(e)
-                    print("Added " + len(list) + " cards to the cube.")
+                    print("bad input!")
+                    cardnumber = 1000
+            if((archetypename,) in archetypesAdded):
+                print("archetype is already in the cube. Another copy will be added anyway.")
+            archetypeCards = readArchetype(archetypename)
+            if(archetypeCards != []):
+                if(cardnumber >= len(archetypeCards)):
+                    for card in archetypeCards:
+                        cards.append(card)
+                    archetypesAdded.append((archetypename,-1))
+                    print("Added entire archetype " + archetypename + " with " + str(len(archetypeCards)) + " cards.")
                 else:
-                    add = []
-                    k = 0
-                    for i in range(size):
-                        if(random.random() < (size-len(add))/(len(list)-k)):
-                            print("Yes " + str((size-len(add))/(len(list)-k)))
-                            add.append(i)
-                        else:
-                            print("No " + str((size-len(add))/(len(list)-k)))
-                        k = k+1
-                    if(size != len(add)):
-                        print("error. " + size + " does not equal " + len(add))
-                    for e in add:
-                        cards.append(e)
+                    addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
+                    for i in addIndices:
+                        cards.append(archetypeCards[i])
+                    archetypesAdded.append((archetypename,cardnumber))
+                    print("Added " + str(cardnumber) + " cards from " + archetypename + " to the cube.")
+            else:
+                print("archetype with name archetype with name" + archetypename + " could not be resolved.")
         elif(inputString.startswith("draft")):
             i = inputString.find(" ")
             #packsize equals number of cards par pack. default 15 card pack
             packsize = 15
             if(i != -1):
-                packsizestr = archetype[(i+1):]
+                packsizestr = inputString[(i+1):]
                 try:
                     packsize = int(packsizestr)
                 except Exception:
                     print("packsize could not be resolved.")
                     packsize = 15
-            packs, rest = createPacks(cards, packsize)
-            cubing(packs, rest)
-    writeCube(cards, archetypes, filename)    
+            cubeInstance = cards.copy()
+            if(cubetype == 1):
+                cubeInstance = cubeInstance + instantiate(archetypesAdded)
+            print("Test:" + str(len(cubeInstance)) + " " + str(len(cards)))
+            packs, rest = createPacks(cubeInstance, packsize)
+            cubing(packs)
+    writeCube(cubetype, cards, archetypesAdded, filename)
+    return cubes
 
