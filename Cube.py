@@ -348,10 +348,14 @@ if __name__ == "__main__":
     archetypes = []
     if not os.path.exists("images"):
         os.makedirs("images")
+    if not os.path.exists("draftlogs"):
+        os.makedirs("draftlogs")
     if not os.path.exists("archetypes"):
         os.makedirs("archetypes")
     if not os.path.exists("cubes"):
         os.makedirs("cubes")
+    if not os.path.exists("draftdecks"):
+        os.makedirs("draftdecks")
     if not os.path.exists("Cube.ini"):
         initStatus()
     else:

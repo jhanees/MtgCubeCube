@@ -41,10 +41,51 @@ def fragmentFormat(xaxis, yaxis, total):
 def Botpick(pack, cardsDrafted):
     return pack.pop(random.randrange(0,len(pack)))
 
+def savedraftedcards(playername, cardsDrafted):
+    if(not os.path.exists(f"draftdecks/{playername}")):
+        file = open(f"draftdecks/{playername}", "w")
+    else:
+        i = 1
+        while i > 0:
+            if(not os.path.exists(f"draftdecks/{playername}" + str(i))):
+                file = open(f"draftdecks/{playername}" + str(i), "w")
+                i = -2
+            i = i+1
+    file.write("Cards Drafted:")
+    for card in cardsDrafted:
+        file.write(card + "\n")
+    file.write(";;")
+    file.close()
+
+def saveLog(draftLog):
+    logname = input("Choose name for the draft Log file:")
+    if(not os.path.exists(f"draftlogs/{logname}")):
+        file = open(f"draftlogs/{logname}", "w")
+    else:
+        i = 1
+        while i > 0:
+            if(not os.path.exists(f"draftlogs/{logname}" + str(i))):
+                file = open(f"draftlogs/{logname}" + str(i), "w")
+                i = -2
+            i = i+1
+    file.write("Draft Log:\n")
+    for roundnumber in range(0,len(draftLog)):
+        file.write(f"Round {roundnumber}:\n")
+        for packnumber in range(0,len(draftLog[roundnumber])):
+            file.write(f"Pack {packnumber}:\n")
+            for card in draftLog[roundnumber][packnumber]:
+                file.write(card + "\n")
+            file.write(";\n")
+        file.write(";;\n")
+    file.write(";;;")
+    file.close()
+
 def makePick(player, pack):
     (playertype, playername, cardsDrafted) = player
     if(playertype == "bot"):
-        cardsDrafted.append(Botpick(pack,cardsDrafted))
+        pick = Botpick(pack,cardsDrafted)
+        cardsDrafted.append(pick)
+        return pick
     elif(playertype == "local"): 
         print("\nIt is now your turn to pick.")
         print("The pack consists of the following cards: " + str(pack))
@@ -98,7 +139,7 @@ def makePick(player, pack):
                     if(info in pack):
                         cardsDrafted.append(info)
                         pack.remove(info)
-                        break
+                        return info
                     else:
                         print("The card \"" + info + "\" is not in this pack")
                         prefill = inputString
@@ -111,21 +152,33 @@ def makePick(player, pack):
                         object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
-
+                        if(info in pack):
+                            cardsDrafted.append(info)
+                            pack.remove(info)
+                            return info
+                        else:
+                            print("The card \"" + info + "\" is not in this pack")
+                            prefill = inputString
+                    else:
+                        prefill = inputString
             else:
                 print("Command was not recognized")
                 prefill=inputString
+
 def draft(packs,players,draftroundnum):
     if(draftroundnum * len(players) > len(packs)):
         print("Drafting with " + str(len(players)) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * len(players)) + " packs but there are only " + str(len(packs)) + " packs.")
         return
+    draftlog = []
     for roundcount in range(0,draftroundnum):
         roundparity = roundcount % 2
         #saves the number of cards drafted for each player
         playernextpack = []
         roundpacks = []
         packnextplayer = []
+        draftorderbypack = []
         for i in range(len(players)):
+            draftorderbypack.append([])
             playernextpack.append(i)
             packnextplayer.append(i)
             roundpacks.append(packs.pop(random.randrange(0,len(packs))))
@@ -134,7 +187,7 @@ def draft(packs,players,draftroundnum):
         while(packsDone < len(roundpacks)):
             for playerind in range(len(players)):
                 if(packnextplayer[playernextpack[playerind]] == playerind):
-                    makePick(players[playerind],roundpacks[playernextpack[playerind]])
+                    draftorderbypack[playernextpack[playerind]].append(makePick(players[playerind],roundpacks[playernextpack[playerind]]))
                     if(len(roundpacks[playernextpack[playerind]]) == 0):
                         packnextplayer[playernextpack[playerind]] = -1
                         packsDone = packsDone + 1
@@ -143,7 +196,11 @@ def draft(packs,players,draftroundnum):
                     playernextpack[playerind] = (playernextpack[playerind] +1- 2 * roundparity) % len(roundpacks)
             time.sleep(0.1)
             print("\nTest Print: " + str(packnextplayer) + "\n" + str(playernextpack) + "\n\n")
-                    
+        draftlog.append(draftorderbypack)
+    for (playertype,a,cardsDrafted) in players:
+        if(playertype == "local"):
+            savedraftedcards(a,cardsDrafted)
+    saveLog(draftlog)
 
         
 def dropLastLetter(word):
