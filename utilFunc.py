@@ -42,6 +42,19 @@ def fragmentFormat(xaxis, yaxis, total):
         return x-1,y
     return x,y
 
+#write archetypes into the ini file    
+def updateStatus(archetypes, cubes):
+    file = open("Cube.ini", "w")
+    file.write("Archetypes:\n")
+    for a in archetypes:
+        file.write(a + ",\n")
+    file.write(";;\n")
+    file.write("Cubes:\n")
+    for c in cubes:
+        file.write(c + ",\n")
+    file.write(";;")
+    file.close()
+
 def Botpick(pack, cardsDrafted):
     return pack.pop(random.randrange(0,len(pack)))
 
@@ -186,7 +199,6 @@ def draft(packs,players,draftroundnum):
             playernextpack.append(i)
             packnextplayer.append(i)
             roundpacks.append(packs.pop(random.randrange(0,len(packs))))
-        print("Test print:\nplayernextpack: " + str(playernextpack) + "\npacknextplayer: " + str(packnextplayer) + "\nroundpacks: " + str(roundpacks))
         packsDone = 0
         while(packsDone < len(roundpacks)):
             for playerind in range(len(players)):
@@ -199,7 +211,6 @@ def draft(packs,players,draftroundnum):
                         packnextplayer[playernextpack[playerind]] = (packnextplayer[playernextpack[playerind]] - 1 + 2 * roundparity) % len(players)
                     playernextpack[playerind] = (playernextpack[playerind] +1- 2 * roundparity) % len(roundpacks)
             time.sleep(0.1)
-            print("\nTest Print: " + str(packnextplayer) + "\n" + str(playernextpack) + "\n\n")
         draftlog.append(draftorderbypack)
     for (playertype,a,cardsDrafted) in players:
         if(playertype == "local"):

@@ -9,8 +9,8 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput
-from Cubing import cubemode
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, updateStatus
+from Cubing import cubemode, cubing
 
 #initializes the ini File
 def initStatus():
@@ -18,18 +18,6 @@ def initStatus():
     file.write("Archetypes:\n;;\nCubes:\n;;")
     file.close()
 
-#write archetypes into the ini file    
-def updateStatus(archetypes, cubes):
-    file = open("Cube.ini", "w")
-    file.write("Archetypes:\n")
-    for a in archetypes:
-        file.write(a + ",\n")
-    file.write(";;\n")
-    file.write("Cubes:\n")
-    for c in cubes:
-        file.write(c + ",\n")
-    file.write(";;")
-    file.close()
 
 #get archetypes from the ini file
 def initialize():
@@ -340,9 +328,16 @@ def mainMenu(archetypes, cubes):
             #TODO
             time.sleep(0.1)
         elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
-            #TODO
-            time.sleep(0.1)
-
+            while(True):
+                name = input("Which cube would you like to draft?\nPress 1 for a list of all available cubes, otherwise enter the name of the Cube\nCommand:")
+                if(name == "1"):
+                    print(f"Cubes:{str(cubes)}")
+                else:
+                    if(name in cubes):
+                        cubing(name)
+                        break
+                    else:
+                        print("The name of the cube was not recognized. Please try again.")
 if __name__ == "__main__":
     #init
     archetypes = []
@@ -361,3 +356,4 @@ if __name__ == "__main__":
     else:
         archetypes, cubes = initialize()
     mainMenu(archetypes, cubes)
+    updateStatus(archetypes, cubes)

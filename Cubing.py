@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, downloadImage, dropLastLetter, draft
+from utilFunc import analyseObject, readArchetype, displayList, downloadImage, dropLastLetter, draft, updateStatus
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -26,38 +26,55 @@ def createPacks(cards, packsize=15):
     print(f"Created {str(len(packs))} packs of {str(packsize)} cards each from {str(cubesize)} cards in the cube.")
     return packs, cards
 
-def cubing(packs):
-    playernumberStr = input("Choose number of players:")
-    try:
-        playernumber = int(playernumberStr)
-        if(playernumber < 2):
-            print("Can't draft with fewer than 2 players. Number of players set to 8 by default.")
+def cubing(filename):
+    if(not os.path.exists("cubes/" + filename)):
+        print("Error!")
+    else:
+        cubetype, cards, archetypesAdded = readCube(filename)
+        packsizeStr = input("Choose packsize:")
+        try:
+            packsize = int(packsizeStr)
+            if(packsize < 1):
+                print("Packsize has to be at least 1. Packsize set to 15 by default.")
+                packsize = 15
+        except:
+            packsize = 15
+            print("Couldn't parse input. Packsize set to 15 by default.")
+        cubeInstance = cards.copy()
+        if(cubetype == 1):
+            cubeInstance = cubeInstance + instantiate(archetypesAdded)
+        packs, rest = createPacks(cubeInstance, packsize)
+        playernumberStr = input("Choose number of players:")
+        try:
+            playernumber = int(playernumberStr)
+            if(playernumber < 2):
+                print("Can't draft with fewer than 2 players. Number of players set to 8 by default.")
+                playernumber = 8
+        except:
             playernumber = 8
-    except:
-        playernumber = 8
-        print("Couldn't parse input. Number of players set to 8 by default.")
-    #we first implement botdraft
-    draftroundnumStr = input("Choose number of draft rounds:")
-    try:
-        draftroundnum = int(draftroundnumStr)
-        if(draftroundnum < 1):
-            print("Can't draft fewer than 1 pack. Number of packs set to 3 by default.")
-            draftroundnum = 3
-    except:
-        draftroundnum = 8
-        print("Couldn't parse input. Number of packs set to 3 by default.")
-    if(draftroundnum * playernumber > len(packs)):
-        print("Drafting with " + str(playernumber) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * playernumber) + " packs but there are only " + str(len(packs)) + " packs.")
-        return
-    yourname = input("\nChoose a Draftername for yourself:")
-    print("Your chosen name is \"" + yourname + "\".")
-    players = []
-    players.append(("local",yourname,[]))
-    i=0
-    while(len(players) < playernumber):
-        players.append(("bot","Bot N°" + str(i),[]))
-        i = i + 1
-    draft(packs,players,draftroundnum)
+            print("Couldn't parse input. Number of players set to 8 by default.")
+        #we first implement botdraft
+        draftroundnumStr = input("Choose number of draft rounds:")
+        try:
+            draftroundnum = int(draftroundnumStr)
+            if(draftroundnum < 1):
+                print("Can't draft fewer than 1 pack. Number of packs set to 3 by default.")
+                draftroundnum = 3
+        except:
+            draftroundnum = 8
+            print("Couldn't parse input. Number of packs set to 3 by default.")
+        if(draftroundnum * playernumber > len(packs)):
+            print("Drafting with " + str(playernumber) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * playernumber) + " packs but there are only " + str(len(packs)) + " packs.")
+            return
+        yourname = input("\nChoose a Draftername for yourself:")
+        print("Your chosen name is \"" + yourname + "\".")
+        players = []
+        players.append(("local",yourname,[]))
+        i=0
+        while(len(players) < playernumber):
+            players.append(("bot","Bot N°" + str(i),[]))
+            i = i + 1
+        draft(packs,players,draftroundnum)
 
     #print("waiting for players...")
     #listen to join requests and accept players
@@ -183,6 +200,7 @@ def cubemode(filename, archetypes, cubes):
             print("input could not be parsed. Selcting the first option by default.")
             cubetype = 0
         cubes.append(filename)
+        updateStatus(archetypes,cubes)
     Options = ["Cube " + filename + " options:", 
                "display | displays the cube",
                "list | lists the cube",
@@ -191,10 +209,9 @@ def cubemode(filename, archetypes, cubes):
                "addarchetype _archetype_ [_cardnumber_] | adds _cardnumber_ cards from _archetype_ to the cube. _cardnumber_ is all by default."
                "remove _cardname_ | removes _cardname from the cube",
                "replace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_",
-               "draft _packsize_ | start drafting with packs of size _packsize_, default is 15.\nends cube mode",
+               "draft | start drafting this cube.\n",
                "options | displays this menu",
-               "back | goes back to the main menu",
-               "quit | ends the programm"]
+               "back | goes back to the main menu"]
     for o in Options:
         print(o)
     while(True):
@@ -337,6 +354,7 @@ def cubemode(filename, archetypes, cubes):
             else:
                 print("archetype with name archetype with name" + archetypename + " could not be resolved.")
         elif(inputString.startswith("draft")):
+            writeCube(cubetype, cards, archetypesAdded, filename)
             i = inputString.find(" ")
             #packsize equals number of cards par pack. default 15 card pack
             packsize = 15
@@ -350,7 +368,6 @@ def cubemode(filename, archetypes, cubes):
             cubeInstance = cards.copy()
             if(cubetype == 1):
                 cubeInstance = cubeInstance + instantiate(archetypesAdded)
-            print("Test:" + str(len(cubeInstance)) + " " + str(len(cards)))
             packs, rest = createPacks(cubeInstance, packsize)
             cubing(packs)
     writeCube(cubetype, cards, archetypesAdded, filename)
