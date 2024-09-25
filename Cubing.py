@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, downloadImage, dropLastLetter, draft, updateStatus
+from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, updateStatus
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -233,7 +233,11 @@ def cubemode(filename, archetypes, cubes):
                 except:
                     print("bad input!")
                     num = 1000
-            displayList(cards,num)
+            if(cubetype == 0):
+                displayList(cards,num)
+            if(cubetype == 1):
+                displaycards= cards + instantiate(archetypesAdded)  
+                displayList(displaycards,num)
         elif(inputString.startswith("list") or inputString.startswith("l")):
             print(cards)
         elif(inputString.startswith("remove ") or inputString.startswith("rm ")):
@@ -307,20 +311,28 @@ def cubemode(filename, archetypes, cubes):
         elif(inputString.startswith("addcard ") or inputString.startswith("ac ")):
             i = inputString.find(" ")
             cardname = inputString[(i+1):]
-            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-            object,info = analyseObject(x)
-            if(object == "card"):
-                print("Card name is " + info)
-                cards.append(info)
-            else:
-                print("Error type is " + info)
-                #if not found tries again with exact command if ambiguous
-                if(info == "ambiguous"):
-                    x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                    object,info = analyseObject(x)
+            try:
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+            except:
+                print("Contacting scryfall failed.")
+                status = -1
+            if(status != -1):
+                object,info = analyseObject(x)
                 if(object == "card"):
                     print("Card name is " + info)
                     cards.append(info)
+                else:
+                    print("Error type is " + info)
+                    #if not found tries again with exact command if ambiguous
+                    if(info == "ambiguous"):
+                        try: 
+                            x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                            object,info = analyseObject(x)
+                        except:
+                            print("Contacting scryfall failed.")
+                    if(object == "card"):
+                        print("Card name is " + info)
+                        cards.append(info)
         elif(inputString.startswith("addarchetype ") or inputString.startswith("aa ")):
             i = inputString.find(" ")
             archetypename = inputString[(i+1):]

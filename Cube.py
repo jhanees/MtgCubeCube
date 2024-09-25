@@ -152,11 +152,16 @@ def editArchetypeMode(filename):
                     cardname2 = cardname[(i+1):]
                     cardname1 = cardname[:i]
                     #searches for card
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname1, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                    object1,info1 = analyseObject(x)
-                    time.sleep(0.1)
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname2, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                    object2,info2 = analyseObject(x)                
+                    try:
+                        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname1)
+                        object1,info1 = analyseObject(x)
+                        time.sleep(0.1)
+                        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname2)
+                        object2,info2 = analyseObject(x)
+                    except:
+                        print("Contacting scryfall failed.")
+                        object1 = ""
+                        object2 = ""
                     #if found writes into file
                     if(object1 == "card" and object2 == "card"):
                         print(info1 + " will be replaced by " + info2 + ".")
@@ -166,28 +171,35 @@ def editArchetypeMode(filename):
                         except:
                             print("cardname " + cardname + " not found and thus could not be replaced.")
                     else:
-                        if(object1 != "card"):
+                        if(object1 != "card" and object1 != ""):
                             print("Error type for first card is " + info1 + ".")
-                        if(object2 != "card"):
+                        if(object2 != "card" and object2 != ""):
                             print("Error type for second card is " + info2 + ".")
             elif(inputString.startswith("add ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                object,info = analyseObject(x)
-                if(object == "card"):
-                    print("Card name is " + info)
-                    cards.append(info)
-                else:
-                    print("Error type is " + info)
-                    #if not found tries again with exact command if ambiguous
-                    if(info == "ambiguous"):
-                        time.sleep(0.1)
-                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                        object,info = analyseObject(x)
+                try:
+                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                except:
+                    print("Contacting scryfall failed.")
+                    status = -1
+                if(status != -1):
+                    object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
                         cards.append(info)
+                    else:
+                        print("Error type is " + info)
+                        #if not found tries again with exact command if ambiguous
+                        if(info == "ambiguous"):
+                            try: 
+                                x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                                object,info = analyseObject(x)
+                            except:
+                                print("Contacting scryfall failed.")
+                        if(object == "card"):
+                            print("Card name is " + info)
+                            cards.append(info)
         file = open("archetypes/" + filename, "w")
         for c in cards:
             file.write(c + "\n")
@@ -236,14 +248,14 @@ def editMode(archetypes, cubes):
                 print(o)
         elif(inputString.startswith("display ") or inputString.startswith("dp ")):
             i = inputString.find(" ")
-            inputString = inputString[(i+1):]
+            archetypePrefix = inputString[(i+1):]
             #find _size_ if used in input
-            i = inputString.find(" ")
+            i = archetypePrefix.find(" ")
             numStr = "500"
             num = 1000
             if (i != -1):
-                numStr = inputString[(i+1):]
-                archetypePrefix = inputString[:i]
+                numStr = archetypePrefix[(i+1):]
+                archetypePrefix = archetypePrefix[:i]
             print("Archetype prefix is " + archetypePrefix)
             try:
                 num = int(numStr)
@@ -264,20 +276,25 @@ def editMode(archetypes, cubes):
         elif(inputString.startswith("s ") or inputString.startswith("search ")):
             i = inputString.find(" ")
             inputString = inputString[(i+1):]
-            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-            object,info = analyseObject(x)
-            #if found writes into file
-            if(object == "card"):
-                print("Card name is " + info)
-                result = []
-                for a in archetypes:
-                    cards = readArchetype(a)
-                    for c in cards:
-                        if c == info:
-                            result.append(a)
-                print(result)
-            else:
-                recognizedCommand = False
+            try:
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                object,info = analyseObject(x)
+            except:
+                print("Contacting scryfall failed.")
+                status = -1
+            if(status != -1):
+                #if found writes into file
+                if(object == "card"):
+                    print("Card name is " + info)
+                    result = []
+                    for a in archetypes:
+                        cards = readArchetype(a)
+                        for c in cards:
+                            if c == info:
+                                result.append(a)
+                    print(result)
+                else:
+                    recognizedCommand = False
         elif(inputString.startswith("write ")  or inputString.startswith("w ")):
             i = inputString.find(" ")
             filename = inputString[(i+1):]

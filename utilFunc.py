@@ -116,6 +116,7 @@ def makePick(player, pack):
         while(True):
             inputString = rlinput("Command: ", prefill)
             prefill=""
+            status=0
             if(inputString.startswith("display1") or inputString.startswith("d1")):
                 i = inputString.find(" ")
                 numStr = "500"
@@ -149,24 +150,13 @@ def makePick(player, pack):
             elif(inputString.startswith("pick ") or inputString.startswith("p ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                object,info = analyseObject(x)
-                if(object == "card"):
-                    print("Card name is " + info)
-                    if(info in pack):
-                        cardsDrafted.append(info)
-                        pack.remove(info)
-                        return info
-                    else:
-                        print("The card \"" + info + "\" is not in this pack")
-                        prefill = inputString
-                else:
-                    print("Error type is " + info)
-                    #if not found tries again with exact command if ambiguous
-                    if(info == "ambiguous"):
-                        time.sleep(0.1)
-                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                        object,info = analyseObject(x)
+                try:
+                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                except:
+                    print("Could not connect to Scryfall. Maybe check your internet connection.")
+                    status = -1
+                if(status != -1):
+                    object,info = analyseObject(x)
                     if(object == "card"):
                         print("Card name is " + info)
                         if(info in pack):
@@ -177,7 +167,27 @@ def makePick(player, pack):
                             print("The card \"" + info + "\" is not in this pack")
                             prefill = inputString
                     else:
-                        prefill = inputString
+                        print("Error type is " + info)
+                        #if not found tries again with exact command if ambiguous
+                        if(info == "ambiguous"):
+                            time.sleep(0.1)
+                            try: 
+                                x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                                object,info = analyseObject(x)
+                            except:
+                                print("Could not connect to Scryfall. Maybe check your internet connection.")
+                                status = -1
+                        if(object == "card"):
+                            print("Card name is " + info)
+                            if(info in pack):
+                                cardsDrafted.append(info)
+                                pack.remove(info)
+                                return info
+                            else:
+                                print("The card \"" + info + "\" is not in this pack")
+                                prefill = inputString
+                        else:
+                            prefill = inputString
             else:
                 print("Command was not recognized")
                 prefill=inputString
@@ -264,28 +274,42 @@ def findAttribute(str, att, subatt=None):
 
 def downloadImage(name):
     time.sleep(0.1)
-    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + name, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+    try:
+        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + name, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+    except:
+        print(f"Threw error while connecting to scryfall. The picture for \"{name}\" could not be downloaded.")
+        return -1
     url = findAttribute(x.text,"image_uris", "small")
     print(url)
-    x = requests.get(url, stream = True, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+    try:
+        x = requests.get(url, stream = True, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+    except:
+        print(f"Could not connect to scryfall. The picture for \"{name}\" could not be downloaded.")
+        return -1
     file = open("images/" + name + ".jpg", "wb")
     shutil.copyfileobj(x.raw,file)
     file.close()
+    return 0
 
-def displayList(names, size=30):
+def displayList(namestodisplay, size=30):
     pics = []
-    for i in range(len(names)):
-        tind = names[i].find("//")
+    toDisplay = namestodisplay.copy()
+    for i in range(len(toDisplay)):
+        tind = toDisplay[i].find("//")
         if(tind != -1):
-            if (os.path.exists("images/" + names[i][:(tind-1)] + ".jpg") == False):
-                print(names[i])
-                downloadImage(names[i][:(tind-1)])
+            if (os.path.exists("images/" + toDisplay[i][:(tind-1)] + ".jpg") == False):
+                print(toDisplay[i])
+                error = downloadImage(toDisplay[i][:(tind-1)])
+                if (error == -1):
+                    toDisplay[i] = "offline"
         else:
-            if (os.path.exists("images/" + names[i] + ".jpg") == False):
-                print(names[i])
-                downloadImage(names[i])
-    for j in range(((len(names)-1)//size)+1):
-        size1 = min(size,len(names)-j*size)
+            if (os.path.exists("images/" + toDisplay[i] + ".jpg") == False):
+                print(toDisplay[i])
+                error = downloadImage(toDisplay[i])
+                if (error == -1):
+                    toDisplay[i] = "offline"
+    for j in range(((len(toDisplay)-1)//size)+1):
+        size1 = min(size,len(toDisplay)-j*size)
         myImage = [None] * size1
         #determine size
         x,y = fragmentFormat(5,2,size1)
@@ -294,11 +318,11 @@ def displayList(names, size=30):
         fig, axs = pyplot.subplots(((size1-1)//x + 1),x)
         fig.tight_layout(pad=0)
         for i in range(size1):
-            tind = names[i].find("//")
+            tind = toDisplay[i+j*size1].find("//")
             if(tind != -1):
-                myImage[i] = image.imread("images/" + names[i+j*size1][:(tind-1)] + ".jpg")
+                myImage[i] = image.imread("images/" + toDisplay[i+j*size1][:(tind-1)] + ".jpg")
             else:
-                myImage[i] = image.imread("images/" + names[i+j*size1] + ".jpg")
+                myImage[i] = image.imread("images/" + toDisplay[i+j*size1] + ".jpg")
             if(y == 1):
                 if(x == 1):
                     axs.set_axis_off()
