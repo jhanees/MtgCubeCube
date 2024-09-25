@@ -139,12 +139,12 @@ def readCube(filename):
         print("This Cube consists of " + str(len(cards)) + " cards and " + str(len(archetypes)) + " archetypes are part of this cube.")
     if(cubetype == 1):
         totalcardnumber = 0
-        for (a,n) in archetypes:
+        for (a,n) in archetypesAdded:
             if(n != -1):
                 totalcardnumber = totalcardnumber + n
             else:
                 totalcardnumber = totalcardnumber + len(readArchetype(a))
-        print("This is a lazy Cube consisting of " + str(len(archetypes)) + " archetypes which add up to a total of " + str(len(cards) + totalcardnumber) + " yet to be determined cards.")
+        print("This is a lazy Cube consisting of " + str(len(archetypesAdded)) + " archetypes which add up to a total of " + str(len(cards) + totalcardnumber) + " yet to be determined cards.")
     return cubetype, cards, archetypesAdded
 
 def writeCube(cubetype, cards, archetypes, filename):
@@ -172,7 +172,6 @@ def cubemode(filename, archetypes, cubes):
     cubetype = 0
     if(os.path.exists("cubes/" + filename)):
         cubetype, cards, archetypesAdded = readCube(filename)
-        print("Cube currently consists of " + str(len(cards)) + " cards.")
     else:
         print("New cube " + filename + " created!")
         a = input("\nWhich Cube type do you want this cube to be? Type 0 for a cube with a specific cardlist and 1 for a Cube which randomly selects cards from specified archetypes every time it is drafted. \nCommand:")
@@ -323,14 +322,16 @@ def cubemode(filename, archetypes, cubes):
             archetypeCards = readArchetype(archetypename)
             if(archetypeCards != []):
                 if(cardnumber >= len(archetypeCards)):
-                    for card in archetypeCards:
-                        cards.append(card)
+                    if(cubetype == 0):
+                        for card in archetypeCards:
+                            cards.append(card)
                     archetypesAdded.append((archetypename,-1))
                     print("Added entire archetype " + archetypename + " with " + str(len(archetypeCards)) + " cards.")
                 else:
-                    addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
-                    for i in addIndices:
-                        cards.append(archetypeCards[i])
+                    if(cubetype == 0):
+                        addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
+                        for i in addIndices:
+                            cards.append(archetypeCards[i])
                     archetypesAdded.append((archetypename,cardnumber))
                     print("Added " + str(cardnumber) + " cards from " + archetypename + " to the cube.")
             else:

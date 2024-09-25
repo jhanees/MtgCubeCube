@@ -2,13 +2,17 @@ import os.path
 import requests
 import time
 import shutil
-import readline
+import platform
+if(platform.system() != "Windows"):
+    import readline
 import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
 
 def rlinput(prompt, prefill=''):
+   if(platform.system() == "Windows"):
+       return input(prompt)
    readline.set_startup_hook(lambda: readline.insert_text(prefill))
    try:
       return input(prompt)  # or raw_input in Python 2
