@@ -364,24 +364,10 @@ def cubemode(filename, archetypes, cubes):
                     archetypesAdded.append((archetypename,cardnumber))
                     print("Added " + str(cardnumber) + " cards from " + archetypename + " to the cube.")
             else:
-                print("archetype with name archetype with name" + archetypename + " could not be resolved.")
+                print("archetype with name archetype with name " + archetypename + " could not be resolved.")
         elif(inputString.startswith("draft")):
             writeCube(cubetype, cards, archetypesAdded, filename)
-            i = inputString.find(" ")
-            #packsize equals number of cards par pack. default 15 card pack
-            packsize = 15
-            if(i != -1):
-                packsizestr = inputString[(i+1):]
-                try:
-                    packsize = int(packsizestr)
-                except Exception:
-                    print("packsize could not be resolved.")
-                    packsize = 15
-            cubeInstance = cards.copy()
-            if(cubetype == 1):
-                cubeInstance = cubeInstance + instantiate(archetypesAdded)
-            packs, rest = createPacks(cubeInstance, packsize)
-            cubing(packs)
+            cubing(filename)
     writeCube(cubetype, cards, archetypesAdded, filename)
     return cubes
 
