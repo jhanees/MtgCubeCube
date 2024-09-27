@@ -99,6 +99,7 @@ def editArchetypeMode(filename):
               "replace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\n" +
               "done | ends edit mode")
         while(True):
+            status = 0
             inputString = input("Edit " + filename + ": ")
             if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
                 break

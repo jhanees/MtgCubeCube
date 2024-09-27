@@ -6,6 +6,7 @@ hosting draft
 joining draft
 bot draft
 extractCommands method: to simplify command handling
+ListtoString method which shows indices + add choosing by index to all inputs that include choosing from a list
 
 draft bot ai:
     recognizing colors
