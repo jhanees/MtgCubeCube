@@ -10,6 +10,7 @@ from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
 
+#input method which displays prompt + prefill and prefill can be edited on the command line, not compatible with windows
 def rlinput(prompt, prefill=''):
    if(platform.system() == "Windows"):
        return input(prompt)
@@ -19,6 +20,7 @@ def rlinput(prompt, prefill=''):
    finally:
       readline.set_startup_hook()
 
+#finds x and y values such that x*y >= total and x/y ~ xaxis/yaxis
 def fragmentFormat(xaxis, yaxis, total):
     if(xaxis < 1):
         print("incorrect x input!")
@@ -41,6 +43,19 @@ def fragmentFormat(xaxis, yaxis, total):
     if(y*(x-1) >= total):
         return x-1,y
     return x,y
+
+#returns the index of matchstring in matchlist. if matchString not in matchList tries to match it with an element. In case of an ultimate fail returns -1
+def getIndexFuzzy(matchString, matchList):
+    if(matchString in matchList):
+        return matchList.index(matchString)
+    else:
+        for ind in range(0,len(matchList)):
+            if(matchList[ind].startswith(matchString)):
+                return ind
+        for ind in range(0,len(matchList)):
+            if(matchList[ind].lower().startswith(matchString.lower())):
+                return ind
+    return -1
 
 #write archetypes into the ini file[deprecated]
 def updateStatus(archetypes, cubes):

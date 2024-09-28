@@ -8,9 +8,7 @@ bot draft
 deck builder
 
 extractCommands method: to simplify command handling
-add decapitalizaton for matching strings when capitalized version fails
-add offline option for finding input card names + getCardname method which searches scryfall or alternatively returns the same string
-
+getIndexFuzzy for (draft pick, remove, pick cube to draft)
 
 draft bot ai:
     recognizing colors
