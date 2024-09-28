@@ -9,7 +9,7 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString
 from Cubing import cubemode, cubing
 
 #initializes the ini File[deprecated]
@@ -68,7 +68,6 @@ def editArchetypeMode(filename):
               "list | lists the archetype\n" + 
               "remove _cardname_ | removes _cardname from the archetype\n" + 
               "add _cardname_ | adds _cardname_\n" + 
-              "replace _cardname1_ _cardname2_ | replaces _cardname1_ with _cardname2_\n" +
               "done | ends edit mode")
         while(True):
             status = 0
@@ -89,65 +88,40 @@ def editArchetypeMode(filename):
                         num = 1000
                 displayList(cards,num)
             elif(inputString.startswith("list") or inputString.startswith("l")):
-                print(cards)
+                print(listToString(cards))
             elif(inputString.startswith("remove ") or inputString.startswith("rm ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
                 #searches for card
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                object,info = analyseObject(x)
-                #if found writes into file
-                if(object == "card"):
-                    print("Card name is " + info)
-                    try:
-                        cards.remove(info)
-                    except:
-                        print("cardname " + info + " not found and thus could not be removed.")
-                else:
-                    print("Error type is " + info)
-                    #if not found tries again with exact command if ambiguous
-                    if(info == "ambiguous"):
-                        x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                        object,info = analyseObject(x)
+                try:
+                    ind = int(cardname)
+                    if(ind < len(cards)):
+                        info = cards[ind]
+                        print("Card name is " + info)
+                        cards.pop(ind)
+                except:
+                    time.sleep(0)
+                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                    object,info = analyseObject(x)
+                    #if found writes into file
                     if(object == "card"):
                         print("Card name is " + info)
                         try:
                             cards.remove(info)
                         except:
                             print("cardname " + info + " not found and thus could not be removed.")
-            elif(inputString.startswith("replace ") or inputString.startswith("rp ")):
-                i = inputString.find(" ")
-                cardname = inputString[(i+1):]
-                i = cardname.find(";")
-                if (i == -1):
-                    print("replace command requires two values seperated by ;")
-                else:
-                    cardname2 = cardname[(i+1):]
-                    cardname1 = cardname[:i]
-                    #searches for card
-                    try:
-                        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname1)
-                        object1,info1 = analyseObject(x)
-                        time.sleep(0.1)
-                        x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname2)
-                        object2,info2 = analyseObject(x)
-                    except:
-                        print("Contacting scryfall failed.")
-                        object1 = ""
-                        object2 = ""
-                    #if found writes into file
-                    if(object1 == "card" and object2 == "card"):
-                        print(info1 + " will be replaced by " + info2 + ".")
-                        try:
-                            cards.remove(info1)
-                            cards.append(info2)
-                        except:
-                            print("cardname " + cardname + " not found and thus could not be replaced.")
                     else:
-                        if(object1 != "card" and object1 != ""):
-                            print("Error type for first card is " + info1 + ".")
-                        if(object2 != "card" and object2 != ""):
-                            print("Error type for second card is " + info2 + ".")
+                        print("Error type is " + info)
+                        #if not found tries again with exact command if ambiguous
+                        if(info == "ambiguous"):
+                            x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                            object,info = analyseObject(x)
+                        if(object == "card"):
+                            print("Card name is " + info)
+                            try:
+                                cards.remove(info)
+                            except:
+                                print("cardname " + info + " not found and thus could not be removed.")
             elif(inputString.startswith("add ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
@@ -198,6 +172,7 @@ def editMode(archetypes, cubes):
         #reads line with potential prefill from prior commands
         inputString = rlinput("Command: ", prefill)
         print("")
+        status = 0
         #checks if command ends the script
         if (inputString.startswith("q") or inputString.startswith("quit")):
             quitBool=True
@@ -342,15 +317,21 @@ def mainMenu(archetypes, cubes):
                             print("Cardname " + card + " not found.")
         elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
             while(True):
-                name = input("Which cube would you like to draft?\nPress 1 for a list of all available cubes, otherwise enter the name of the Cube\nCommand:")
-                if(name == "1"):
-                    print(f"Cubes:{str(cubes)}")
+                name = input("Which cube would you like to draft?\nPress l for a list of all available cubes, otherwise enter the name or index of the Cube\nCommand:")
+                if(name == "d"):
+                    print(f"Cubes:{listToString(cubes)}")
                 else:
                     if(name in cubes):
                         cubing(name)
                         break
                     else:
-                        print("The name of the cube was not recognized. Please try again.")
+                        try:
+                            ind = int(name)
+                            if(ind < len(cubes)):
+                                print("Chosen cube is " + cubes[ind] + ".")
+                                cubing(cubes[ind])
+                        except:
+                            print("The name of the cube was not recognized. Please try again.")
 if __name__ == "__main__":
     #init
     archetypes = []

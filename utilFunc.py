@@ -55,6 +55,16 @@ def updateStatus(archetypes, cubes):
     file.write(";;")
     file.close()
 
+#converts a list to a string and includes the index of every element
+def listToString(list):
+    listString = "["
+    for ind in range(0,len(list)):
+        listString = listString + str(ind) + ":'" + str(list[ind]) + "', "
+    if(listString.endswith(", ")):
+        listString = listString[:len(listString)-2]
+    listString = listString + "]"
+    return listString
+
 def Botpick(pack, cardsDrafted):
     return pack.pop(random.randrange(0,len(pack)))
 
@@ -105,13 +115,13 @@ def makePick(player, pack):
         return pick
     elif(playertype == "local"): 
         print("\nIt is now your turn to pick.")
-        print("The pack consists of the following cards: " + str(pack))
+        print("The pack consists of the following cards: " + listToString(pack))
         print("Options:\n" +
               "display1 | displays the pack\n" + 
               "display2 | displays your drafted cards\n" +
               "list1 | lists the pack\n" +
               "list2 | lists your drafted cards\n" +
-              "pick _cardname_ | adds _cardname to your drafted cards and passes the pack.")
+              "pick _cardname_ | adds _cardname_ to your drafted cards and passes the pack. alternatively use packindex instead of cardname")
         prefill = ""
         while(True):
             inputString = rlinput("Command: ", prefill)
@@ -131,7 +141,7 @@ def makePick(player, pack):
                         num = 1000
                 displayList(pack,num)
             elif(inputString.startswith("list1") or inputString.startswith("l1")):
-                print(str(pack))
+                print(listToString(pack))
             elif(inputString.startswith("display2") or inputString.startswith("d2")):
                 i = inputString.find(" ")
                 numStr = "500"
@@ -150,6 +160,17 @@ def makePick(player, pack):
             elif(inputString.startswith("pick ") or inputString.startswith("p ")):
                 i = inputString.find(" ")
                 cardname = inputString[(i+1):]
+                try:
+                    ind = int(cardname)
+                    if(ind < len(pack)):
+                        info = pack[ind]
+                        print("The chosen card is " + info +".")
+                        cardsDrafted.append(info)
+                        pack.remove(info)
+                        return info
+                except:
+                    #dummy line
+                    status = 0
                 try:
                     x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 except:
