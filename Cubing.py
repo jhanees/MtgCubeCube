@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, updateStatus
+from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -200,7 +200,6 @@ def cubemode(filename, archetypes, cubes):
             print("input could not be parsed. Selcting the first option by default.")
             cubetype = 0
         cubes.append(filename)
-        updateStatus(archetypes,cubes)
     Options = ["Cube " + filename + " options:", 
                "display | displays the cube",
                "list | lists the cube",

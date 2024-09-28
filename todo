@@ -7,6 +7,9 @@ joining draft
 bot draft
 extractCommands method: to simplify command handling
 ListtoString method which shows indices + add choosing by index to all inputs that include choosing from a list
+add decapitalizaton for matching strings when capitalized version fails
+add offline option for finding input card names
+deck builder
 
 draft bot ai:
     recognizing colors

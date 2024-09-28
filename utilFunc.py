@@ -42,7 +42,7 @@ def fragmentFormat(xaxis, yaxis, total):
         return x-1,y
     return x,y
 
-#write archetypes into the ini file    
+#write archetypes into the ini file[deprecated]
 def updateStatus(archetypes, cubes):
     file = open("Cube.ini", "w")
     file.write("Archetypes:\n")

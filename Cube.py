@@ -9,10 +9,10 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, updateStatus
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput
 from Cubing import cubemode, cubing
 
-#initializes the ini File
+#initializes the ini File[deprecated]
 def initStatus():
     file = open("Cube.ini", "w")
     file.write("Archetypes:\n;;\nCubes:\n;;")
@@ -21,37 +21,9 @@ def initStatus():
 
 #get archetypes from the ini file
 def initialize():
-    archetypes = []
-    cubes = []
-    file = open("Cube.ini", "r")
-    text = file.read()
-    ind = text.find("Archetypes:\n")
-    if ind == -1:
-        print("Could not initialize archetypes")
-    else:
-        ind = ind+12
-        x = ""
-        while(text[ind] != ";"):
-            if(text[ind] == ","):
-                archetypes.append(x)
-                x = ""
-                ind = ind + 2
-            x = x + text[ind]
-            ind = ind + 1
+    archetypes = [f for f in os.listdir("archetypes/") if os.path.isfile(os.path.join("archetypes/", f))]
+    cubes = [f for f in os.listdir("cubes/") if os.path.isfile(os.path.join("cubes/", f))]
     print(str(len(archetypes)) + " archetypes loaded")
-    ind = text.find("Cubes:\n")
-    if ind == -1:
-        print("Could not initialize Cubes")
-    else:
-        ind = ind+7
-        x = ""
-        while(text[ind] != ";"):
-            if(text[ind] == ","):
-                cubes.append(x)
-                x = ""
-                ind = ind + 2
-            x = x + text[ind]
-            ind = ind + 1
     print(str(len(cubes)) + " cubes loaded")
     return archetypes, cubes
 
@@ -314,7 +286,6 @@ def editMode(archetypes, cubes):
             prefill = inputString
         else:
             prefill = ""
-    updateStatus(archetypes, cubes)
     return quitBool
 
 def mainMenu(archetypes, cubes):
@@ -345,6 +316,30 @@ def mainMenu(archetypes, cubes):
         elif(inputString.startswith("join draft")  or inputString.startswith("jd")):
             #TODO
             time.sleep(0.1)
+        elif(inputString.startswith("debug")  or inputString.startswith("db")):
+            for a in archetypes:
+                if (os.path.exists("archetypes/" + a) == False):
+                    print("Filename " + a + " does not exist")
+                else:
+                    file = open("archetypes/" + a, "r")
+                    cardsPlus = file.readlines()
+                    cards = list(map(dropLastLetter,cardsPlus))
+                    file.close()
+                    for card in cards:
+                        status = 0
+                        time.sleep(0.1)
+                        try:
+                            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + card, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                        except:
+                            print("Contacting scryfall failed.")
+                            status = -1
+                        if(status != -1):
+                            object,info = analyseObject(x)
+                            if(object == "card"):
+                                if(info != card):
+                                    print("Card name is " + info + " and not " + card + " in archetype " + a + ".")
+                        else:
+                            print("Cardname " + card + " not found.")
         elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
             while(True):
                 name = input("Which cube would you like to draft?\nPress 1 for a list of all available cubes, otherwise enter the name of the Cube\nCommand:")
@@ -369,9 +364,5 @@ if __name__ == "__main__":
         os.makedirs("cubes")
     if not os.path.exists("draftdecks"):
         os.makedirs("draftdecks")
-    if not os.path.exists("Cube.ini"):
-        initStatus()
-    else:
-        archetypes, cubes = initialize()
+    archetypes, cubes = initialize()
     mainMenu(archetypes, cubes)
-    updateStatus(archetypes, cubes)
