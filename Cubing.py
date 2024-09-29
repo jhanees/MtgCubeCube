@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, listToString
+from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, listToString, getIndexFuzzy, rlinput, chopItUp
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -187,7 +187,12 @@ def cubemode(filename, archetypes, cubes):
     cards = []
     archetypesAdded = []
     cubetype = 0
-    if(os.path.exists("cubes/" + filename)):
+    try:
+        ind = int(filename)
+    except:
+        ind = getIndexFuzzy(filename, cubes)
+    if(ind != -1 and os.path.exists("cubes/" + cubes[ind])):
+        filename = cubes[ind]
         cubetype, cards, archetypesAdded = readCube(filename)
     else:
         print("New cube " + filename + " created!")
@@ -205,33 +210,36 @@ def cubemode(filename, archetypes, cubes):
                "list | lists the cube",
                "archetypes | displays list of all archetypes and all archetypes in the cube"
                "addcard _cardname_ | adds _cardname_",
-               "addarchetype _archetype_ [_cardnumber_] | adds _cardnumber_ cards from _archetype_ to the cube. _cardnumber_ is all by default."
-               "removecard _cardname_ | removes the card _cardname_ from the cube. Can also refer to the card by index.",
-               "removearchetype _archetypename_ | removes archetype _archetypename_ from the cube. can also refer to the archetype by index among added archetypes.",
+               "addarchetype _archetypeID_ [_cardnumber_] | adds _cardnumber_ cards from archetype _archetypeID_ to the cube. _cardnumber_ is all by default. _archetypeID_ can be name or index."
+               "removecard _cardID_ | removes the card _cardID_ from the cube. Can refer to the card by index or name.",
+               "removearchetype _archetypeID_ | removes archetype _archetypeID_ from the cube. _archetypeID_ can be name or index.",
                "draft | start drafting this cube.\n",
                "options | displays this menu",
                "back | goes back to the main menu"]
     for o in Options:
         print(o)
     while(True):
-        inputString = input("Cube " + filename + ": ")
-        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("back") or inputString.startswith("q ") or inputString.startswith("quit ")):
+        inputString = rlinput("Cube " + filename + ": ", prefill)
+        prefill = ""
+        commands = chopItUp(inputString, " ")
+        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("back") or inputString.startswith("q") or inputString.startswith("quit")):
             break
         if(inputString.startswith("archetypes")):
             print("All archetypes: " + listToString(archetypes))
             print("Archetypes added so far: " + listToString(archetypesAdded))
+        elif(inputString.lower().startswith("o")):
+            for o in Options:
+                print(o)
         elif(inputString.startswith("display") or inputString.startswith("dp")):
-            i = inputString.find(" ")
-            numStr = "500"
-            num = 1000
-            if (i != -1):
-                numStr = inputString[(i+1):]
-                inputString = inputString[:i]
+            if(len(commands) > 1):
+                numStr = commands[1]
                 try:
                     num = int(numStr)
                 except:
                     print("bad input!")
                     num = 1000
+            else:
+                num = 1000
             if(cubetype == 0):
                 displayList(cards,num)
             if(cubetype == 1):
@@ -240,8 +248,7 @@ def cubemode(filename, archetypes, cubes):
         elif(inputString.startswith("list") or inputString.startswith("l")):
             print(cards)
         elif(inputString.startswith("removecard ") or inputString.startswith("rc ")):
-            i = inputString.find(" ")
-            cardname = inputString[(i+1):]
+            cardname = commands[1]
             #searches for card
             object = ""
             info = ""
@@ -252,39 +259,15 @@ def cubemode(filename, archetypes, cubes):
                     print("Card name is " + info)
                     cards.pop(ind)
             except:
-                time.sleep(0)
-                try:
-                    x = requests.get('https://api.scryfall.com/cards/named?exact=' + cardname)
-                    object,info = analyseObject(x)
-                except:
-                    print("Error occured while contacting scryfall.")
-                #if found writes into file
-                if(object == "card"):
+                ind = getIndexFuzzy(cardname,cards)
+                if(ind != -1):
+                    info = cards[ind]
                     print("Card name is " + info)
-                    try:
-                        cards.remove(info)
-                    except:
-                        print("cardname " + info + " not found and thus could not be removed.")
-                elif(object == "error"):
-                    print("Error type is " + info)
-                    #if not found tries again with exact command if ambiguous
-                    if(info == "ambiguous"):
-                        object = ""
-                        info = ""
-                        try:
-                            x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString)
-                            object,info = analyseObject(x)
-                        except:
-                            print("Error occured while contacting scryfall.")
-                    if(object == "card"):
-                        print("Card name is " + info)
-                        try:
-                            cards.remove(info)
-                        except:
-                            print("cardname " + info + " not found and thus could not be removed.")
+                    cards.remove(info)
+                else:
+                    print("No card starting with " + cardname + " was found in this cube and thus no card was removed.")
         elif(inputString.startswith("removearchetype ") or inputString.startswith("ra ")):
-            i = inputString.find(" ")
-            archetypename = inputString[(i+1):]
+            archetypename = commands[1]
             #searches for card
             object = ""
             info = ""
@@ -297,15 +280,23 @@ def cubemode(filename, archetypes, cubes):
                     else:
                         print("Deleted " + str(number) + " cards from archetype " + name + " from the cube.")
                     archetypesAdded.pop(ind)
-            except:
-                time.sleep(0)
-                try:
-                    archetypesAdded.remove((archetypename,))
-                except:
-                    print("archetype named " + archetypename + " not found and thus could not be removed.")
+            except ValueError:
+                archetypesAddedNames = []
+                for i in range(0, len(archetypesAdded)):
+                    (archetypename2,a) = archetypesAdded[i]
+                    archetypesAddedNames.append(archetypename2)
+                ind = getIndexFuzzy(archetypename,archetypesAddedNames)
+                if(ind != -1):
+                    (name,number) = archetypesAdded[ind]
+                    if number == -1:
+                        print("Deleted entire archetype " + name + " from the cube.")
+                    else:
+                        print("Deleted " + str(number) + " cards from archetype " + name + " from the cube.")
+                    archetypesAdded.remove((name,number))
+                else:
+                    print("Archetype starting with " + archetypename + " not found and thus could not be removed.")
         elif(inputString.startswith("addcard ") or inputString.startswith("ac ")):
-            i = inputString.find(" ")
-            cardname = inputString[(i+1):]
+            cardname = commands[1]
             try:
                 x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
             except:
@@ -329,18 +320,16 @@ def cubemode(filename, archetypes, cubes):
                         print("Card name is " + info)
                         cards.append(info)
         elif(inputString.startswith("addarchetype ") or inputString.startswith("aa ")):
-            i = inputString.find(" ")
-            archetypename = inputString[(i+1):]
-            i = archetypename.find(" ")
-            cardnumber = 1000
-            if(i != -1):
-                cardnumberStr = archetypename[(i+1):]
-                archetypename = archetypename[:i]
+            archetypename = commands[1]
+            if(commands > 2):
+                cardnumberStr = commands[2]
                 try:
                     cardnumber = int(cardnumberStr)
                 except:
                     print("bad input!")
                     cardnumber = 1000
+            else:
+                cardnumber = 1000
             try:
                 ind = int(archetypename)
                 if(ind < len(archetypes)):
@@ -353,40 +342,46 @@ def cubemode(filename, archetypes, cubes):
                             if(cubetype == 0):
                                 for card in archetypeCards:
                                     cards.append(card)
-                            archetypesAdded.append((archetypename,-1))
-                            print("Added entire archetype " + archetypename + " with " + str(len(archetypeCards)) + " cards.")
+                            archetypesAdded.append((name,-1))
+                            print("Added entire archetype " + name + " with " + str(len(archetypeCards)) + " cards.")
                         else:
                             if(cubetype == 0):
                                 addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
                                 for i in addIndices:
                                     cards.append(archetypeCards[i])
-                            archetypesAdded.append((archetypename,cardnumber))
-                            print("Added " + str(cardnumber) + " cards from " + archetypename + " to the cube.")
+                            archetypesAdded.append((name,cardnumber))
+                            print("Added " + str(cardnumber) + " cards from " + name + " to the cube.")
                     else:
                         print("archetype with name " + archetypename + " could not be resolved.")
-            except:
-                if((archetypename,) in archetypesAdded):
-                    print("archetype is already in the cube. Another copy will be added anyway.")
-                archetypeCards = readArchetype(archetypename)
-                if(archetypeCards != []):
-                    if(cardnumber >= len(archetypeCards)):
-                        if(cubetype == 0):
-                            for card in archetypeCards:
-                                cards.append(card)
-                        archetypesAdded.append((archetypename,-1))
-                        print("Added entire archetype " + archetypename + " with " + str(len(archetypeCards)) + " cards.")
+            except ValueError:
+                ind = getIndexFuzzy(archetypename,archetypes)
+                if(ind != -1):
+                    name = archetypes[ind]
+                    if((name,) in archetypesAdded):
+                        print("archetype is already in the cube. Another copy will be added anyway.")
+                    archetypeCards = readArchetype(name)
+                    if(archetypeCards != []):
+                        if(cardnumber >= len(archetypeCards)):
+                            if(cubetype == 0):
+                                for card in archetypeCards:
+                                    cards.append(card)
+                            archetypesAdded.append((name,-1))
+                            print("Added entire archetype " + name + " with " + str(len(archetypeCards)) + " cards.")
+                        else:
+                            if(cubetype == 0):
+                                addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
+                                for i in addIndices:
+                                    cards.append(archetypeCards[i])
+                            archetypesAdded.append((name,cardnumber))
+                            print("Added " + str(cardnumber) + " cards from " + name + " to the cube.")
                     else:
-                        if(cubetype == 0):
-                            addIndices = random.sample(range(0,len(archetypeCards)),cardnumber)
-                            for i in addIndices:
-                                cards.append(archetypeCards[i])
-                        archetypesAdded.append((archetypename,cardnumber))
-                        print("Added " + str(cardnumber) + " cards from " + archetypename + " to the cube.")
-                else:
-                    print("archetype with name " + archetypename + " could not be resolved.")
+                        print("archetype with name " + name + " could not be resolved.")
         elif(inputString.startswith("draft")):
             writeCube(cubetype, cards, archetypesAdded, filename)
             cubing(filename)
+        else:
+            prefill = inputString
+            print("Command not recognized")
     writeCube(cubetype, cards, archetypesAdded, filename)
     return cubes
 

@@ -9,7 +9,7 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString, getIndexFuzzy, chopItUp, sortArchetypes
 from Cubing import cubemode, cubing
 
 #initializes the ini File[deprecated]
@@ -21,19 +21,24 @@ def initStatus():
 
 #get archetypes from the ini file
 def initialize():
-    archetypes = [f for f in os.listdir("archetypes/") if os.path.isfile(os.path.join("archetypes/", f))]
+    archetypesUnsorted = [f for f in os.listdir("archetypes/") if os.path.isfile(os.path.join("archetypes/", f))]
     cubes = [f for f in os.listdir("cubes/") if os.path.isfile(os.path.join("cubes/", f))]
-    print(str(len(archetypes)) + " archetypes loaded")
+    print(str(len(archetypesUnsorted)) + " archetypes loaded")
     print(str(len(cubes)) + " cubes loaded")
+    archetypes = sortArchetypes(archetypesUnsorted)
     return archetypes, cubes
 
-def writemode(filename):
-    print("Write file mode options:\nstop | stops write file mode and closes the file\n_cardname_ | searches up _cardname_ on scryfall and writes the english name of the card into _filename_ if sucessful")
+def writearchetypemode(filename):
+    print("Write file mode options:\n" +
+          "stop | stops write file mode and closes the file\n" + 
+          "_cardname_ | searches up _cardname_ on scryfall and writes the english name of the card into _filename_ if sucessful")
     file = open("archetypes/" + filename, "w")
     #write file mode
     while(True):
         inputString = input("Write " + filename + ": ")
-        if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
+        commands = chopItUp(inputString," ")
+        command = commands[0]
+        if (command == "end" or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
             break
         #searches for card
         x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
@@ -71,27 +76,25 @@ def editArchetypeMode(filename):
               "done | ends edit mode")
         while(True):
             status = 0
-            inputString = input("Edit " + filename + ": ")
+            inputString = rlinput("Edit " + filename + ": ")
+            commands = chopItUp(inputString," ")
             if (inputString.startswith("end") or inputString.startswith("done") or inputString.startswith("stop") or inputString.startswith("q ") or inputString.startswith("quit ")):
                 break
             if(inputString.startswith("display") or inputString.startswith("dp")):
-                i = inputString.find(" ")
-                numStr = "500"
-                num = 1000
-                if (i != -1):
-                    numStr = inputString[(i+1):]
-                    inputString = inputString[:i]
+                if(len(commands) > 1):
+                    numStr = commands[1]
                     try:
                         num = int(numStr)
                     except:
                         print("bad input!")
                         num = 1000
+                else:
+                    num = 1000
                 displayList(cards,num)
             elif(inputString.startswith("list") or inputString.startswith("l")):
                 print(listToString(cards))
             elif(inputString.startswith("remove ") or inputString.startswith("rm ")):
-                i = inputString.find(" ")
-                cardname = inputString[(i+1):]
+                cardname = commands[1]
                 #searches for card
                 try:
                     ind = int(cardname)
@@ -100,31 +103,15 @@ def editArchetypeMode(filename):
                         print("Card name is " + info)
                         cards.pop(ind)
                 except:
-                    time.sleep(0)
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                    object,info = analyseObject(x)
-                    #if found writes into file
-                    if(object == "card"):
+                    ind = getIndexFuzzy(cardname,cards)
+                    if(ind != -1):
+                        info = cards[ind]
                         print("Card name is " + info)
-                        try:
-                            cards.remove(info)
-                        except:
-                            print("cardname " + info + " not found and thus could not be removed.")
+                        cards.remove(info)
                     else:
-                        print("Error type is " + info)
-                        #if not found tries again with exact command if ambiguous
-                        if(info == "ambiguous"):
-                            x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                            object,info = analyseObject(x)
-                        if(object == "card"):
-                            print("Card name is " + info)
-                            try:
-                                cards.remove(info)
-                            except:
-                                print("cardname " + info + " not found and thus could not be removed.")
+                        print("cardname " + cardname + " not found and thus could not be removed.")
             elif(inputString.startswith("add ")):
-                i = inputString.find(" ")
-                cardname = inputString[(i+1):]
+                cardname = commands[1]
                 try:
                     x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 except:
@@ -155,11 +142,12 @@ def editArchetypeMode(filename):
 def editMode(archetypes, cubes):
     #state options in console
     Options = ["Edit Mode Options:", 
-               "write _filename_ | puts you into write file mode to create the archetype _filename_",
-               "edit _filename_ | reads the archetype _filename_ and gives you options to change it",
-               "display _filename_ [size] | displays pictures of all cards in _filename_, downloads pictures from scryfall if needed. [size] puts number of cards displayed to [size] cards at a time",
-               "cube _cubename_ | puts you into cubemode",
+               "write _filename_ | puts you into write file mode to create the archetype _filename_.",
+               "edit _archetypeID_ | reads the archetype _archetypeID_ and gives you options to change it.",
+               "display _fileID_ [size] | displays pictures of all cards in _fileID_, downloads pictures from scryfall if needed. [size] puts number of cards displayed to [size] cards at a time",
+               "cube _cubeID_ | puts you into cubemode editing _cubeID_. _cubeID_ can be the name or the index in cubelist.",
                "archetypes | lists all archetypes",
+               "cubes | lists all cubes",
                "options | displays this menu",
                "back | goes back to the main menu",
                "quit | ends the programm"]
@@ -171,7 +159,8 @@ def editMode(archetypes, cubes):
     while(True):
         #reads line with potential prefill from prior commands
         inputString = rlinput("Command: ", prefill)
-        print("")
+        commands = chopItUp(inputString, " ")
+        command = commands[0]
         status = 0
         #checks if command ends the script
         if (inputString.startswith("q") or inputString.startswith("quit")):
@@ -184,48 +173,49 @@ def editMode(archetypes, cubes):
         recognizedCommand = True
         #check for all command options
         if(inputString.startswith("archetypes") or inputString.startswith("a")):
-            print(archetypes)
+            print(listToString(archetypes))
+        elif(inputString.startswith("cubes") or inputString.startswith("cs ")):
+            print(listToString(cubes))
         elif(inputString.startswith("options") or inputString.startswith("o")):
             for o in Options:
                 print(o)
         elif(inputString.startswith("cube ") or inputString.startswith("c ")):
-            i = inputString.find(" ")
-            inputString = inputString[(i+1):]
-            cubes = cubemode(inputString, archetypes, cubes)
-            for o in Options:
-                print(o)
-        elif(inputString.startswith("display ") or inputString.startswith("dp ")):
-            i = inputString.find(" ")
-            archetypePrefix = inputString[(i+1):]
-            #find _size_ if used in input
-            i = archetypePrefix.find(" ")
-            numStr = "500"
-            num = 1000
-            if (i != -1):
-                numStr = archetypePrefix[(i+1):]
-                archetypePrefix = archetypePrefix[:i]
-            print("Archetype prefix is " + archetypePrefix)
-            try:
-                num = int(numStr)
-            except:
-                print("bad input!")
-                num = 1000
-            f = []
-            for archetype in archetypes:
-                if(archetype.startswith(archetypePrefix)):
-                    f.append(archetype)
-            if(f != []):
-                print("Archetypes to display are " + str(f))
+            if(len(commands) > 1):
+                cubes = cubemode(commands[1], archetypes, cubes)
+                for o in Options:
+                    print(o)
             else:
-                print("No archetype starting with " + archetypePrefix + " found")
-                recognizedCommand = False
-            for archetype in f:
-                display(archetype, num)
+                print("Failed to specify a cubename or index.")
+        elif(inputString.startswith("display ") or inputString.startswith("dp ")):
+            if(len(commands) > 1):
+                archetypePrefix = commands[1]
+                #find _size_ if used in input
+                if(len(commands) > 2):
+                    numStr = commands[2]
+                    try:
+                        num = int(numStr)
+                    except:
+                        print("bad input!")
+                        num = 1000
+                else:
+                    num = 1000
+                try:
+                    ind = int(archetypePrefix)
+                except ValueError:
+                    ind = getIndexFuzzy(archetypePrefix,archetypes)
+                if(ind != -1):
+                    archetype = archetypes[ind]
+                    print("Archetype to display is " + archetype + ".")
+                    display(archetype, num)
+                else:
+                    print("No archetype starting with " + archetypePrefix + " found")
+                    recognizedCommand = False
+            else:
+                print("Failed to specify an archetype identifier for the archetype to display.")
         elif(inputString.startswith("s ") or inputString.startswith("search ")):
-            i = inputString.find(" ")
-            inputString = inputString[(i+1):]
+            cardnameprefix = commands[1]
             try:
-                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardnameprefix, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 object,info = analyseObject(x)
             except:
                 print("Contacting scryfall failed.")
@@ -244,16 +234,34 @@ def editMode(archetypes, cubes):
                 else:
                     recognizedCommand = False
         elif(inputString.startswith("write ")  or inputString.startswith("w ")):
-            i = inputString.find(" ")
-            filename = inputString[(i+1):]
-            print("Filename is " + filename)
-            writemode(filename)
-            archetypes.add(filename)
+            filename = commands[1]
+            try:
+                int(filename)
+                print("For compatibility issues numbers are not allowed as archetype names")
+            except ValueError:
+                print("Filename is " + filename)
+                writearchetypemode(filename)
+                archetypes.add(filename)
         elif(inputString.startswith("edit ")  or inputString.startswith("e ")):
-            i = inputString.find(" ")
-            filename = inputString[(i+1):]
-            print("Filename is " + filename)
-            editArchetypeMode(filename)
+            nameprefixorindex = commands[1]
+            try:
+                ind = int(nameprefixorindex)
+                if(ind < len(archetypes)):
+                    filename = archetypes[ind]
+                    print("Filename is " + filename)
+                    editArchetypeMode(filename)
+                else:
+                    print(f"There are only {len(archetypes)} archetypes. Index {ind} out of bounds.")
+                    prefill=inputString
+            except ValueError:    
+                ind = getIndexFuzzy(nameprefixorindex, archetypes)
+                if(ind != -1):
+                    filename = archetypes[ind]
+                    print("Filename is " + filename)
+                    editArchetypeMode(filename)
+                else:
+                    print(f"No archetype starting with {nameprefixorindex} found.")
+                    prefill=inputString
         else:
             recognizedCommand = False
         if(recognizedCommand == False):
@@ -277,9 +285,9 @@ def mainMenu(archetypes, cubes):
         if (inputString.startswith("q")):
             break
         #checks for write file mode
-        if(inputString.startswith("o") or inputString.startswith("Options")):
+        if(inputString.startswith("o") or inputString.startswith("O")):
             print(options)
-        elif(inputString.startswith("e") or inputString.startswith("edit")):
+        elif(inputString.startswith("e") or inputString.startswith("E")):
             quitBool = editMode(archetypes, cubes)
             if(quitBool):
                 break
@@ -318,11 +326,13 @@ def mainMenu(archetypes, cubes):
         elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
             while(True):
                 name = input("Which cube would you like to draft?\nPress l for a list of all available cubes, otherwise enter the name or index of the Cube\nCommand:")
-                if(name == "d"):
+                if(name == "l"):
                     print(f"Cubes:{listToString(cubes)}")
                 else:
-                    if(name in cubes):
-                        cubing(name)
+                    ind = getIndexFuzzy(name,cubes)
+                    if(ind != -1):
+                        print("You chose to draft cube " + cubes[ind] + ".")
+                        cubing(cubes[ind])
                         break
                     else:
                         try:

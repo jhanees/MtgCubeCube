@@ -1,14 +1,8 @@
-creating cubes
-creating probabilistic cubes
 self adjusting random cubes
-drafting
 hosting draft
 joining draft
 bot draft
 deck builder
-
-extractCommands method: to simplify command handling
-getIndexFuzzy for (draft pick, remove, pick cube to draft)
 
 draft bot ai:
     recognizing colors

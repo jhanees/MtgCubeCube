@@ -13,10 +13,14 @@ from matplotlib import image
 #input method which displays prompt + prefill and prefill can be edited on the command line, not compatible with windows
 def rlinput(prompt, prefill=''):
    if(platform.system() == "Windows"):
-       return input(prompt)
+       x = input(prompt)
+       print("")
+       return x
    readline.set_startup_hook(lambda: readline.insert_text(prefill))
    try:
-      return input(prompt)  # or raw_input in Python 2
+       x = input(prompt)
+       print("")
+       return x  # or raw_input in Python 2
    finally:
       readline.set_startup_hook()
 
@@ -80,6 +84,81 @@ def listToString(list):
     listString = listString + "]"
     return listString
 
+#separates the string into a list of strings separated by each instance of separator
+def chopItUp(string,separator):
+    chopped = []
+    ind = string.find(separator)
+    while(ind != -1):
+        cut = string[:ind]
+        chopped.append(cut)
+        string = string[ind+len(separator):]
+        ind = string.find(separator)
+    chopped.append(string)
+    return chopped
+#sort archetypes current order:artifacts,monocolor,ally,enemy,shards,wedges,rest
+def sortArchetypes(archetypesUnsorted):
+    archetypes = []
+    for a in ["Artifacts", "White", "Blue", "Black", "Red", "Green"]:
+        if(a in archetypesUnsorted):
+            archetypesUnsorted.remove(a)
+            archetypes.append(a)
+    colorcombos = {}
+    for w in [0,1]:
+        for u in [0,1]:
+            for b in [0,1]:
+                for r in [0,1]:
+                    for g in [0,1]:
+                        colorcombos[(w,u,b,r,g)] = []
+    for a in archetypesUnsorted:
+        w,u,b,r,g = 0,0,0,0,0
+        i = 0
+        while(True):
+            if(len(a) <= i):
+                break
+            elif a[i] == "W":
+                w = 1
+            elif a[i] == "U":
+                u = 1
+            elif a[i] == "B":
+                b = 1
+            elif a[i] == "R":
+                r = 1
+            elif a[i] == "G":
+                g = 1
+            else:
+                break
+            i = i+1
+        colorcombos[(w,u,b,r,g)].append(a)
+    for singleColor in [(1,0,0,0,0),(0,1,0,0,0),(0,0,1,0,0),(0,0,0,1,0),(0,0,0,0,1)]:
+        for a in colorcombos[singleColor]:
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    for allyColor in [(1,1,0,0,0),(0,1,1,0,0),(0,0,1,1,0),(0,0,0,1,1),(1,0,0,0,1)]:
+        for a in colorcombos[allyColor]:
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    for enemyColor in [(1,0,1,0,0),(0,1,0,1,0),(0,0,1,0,1),(1,0,0,1,0),(0,1,0,0,1)]:
+        for a in colorcombos[enemyColor]:
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    for shard in [(1,1,1,0,0),(0,1,1,1,0),(0,0,1,1,1),(1,0,0,1,1),(1,1,0,0,1)]:
+        for a in colorcombos[shard]:
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    for wedge in [(1,0,1,1,0),(0,1,0,1,1),(1,0,1,0,1),(1,1,0,1,0),(0,1,1,0,1)]:
+        for a in colorcombos[wedge]:
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    for a in archetypesUnsorted:
+        if(a.find("lands") != -1):
+            archetypes.append(a)
+            archetypesUnsorted.remove(a)
+    archetypesUnsorted.sort()
+    for a in archetypesUnsorted:
+        archetypes.append(a)
+    return archetypes
+
+#make the bot AI pick a card from the pack
 def Botpick(pack, cardsDrafted):
     return pack.pop(random.randrange(0,len(pack)))
 
@@ -136,10 +215,11 @@ def makePick(player, pack):
               "display2 | displays your drafted cards\n" +
               "list1 | lists the pack\n" +
               "list2 | lists your drafted cards\n" +
-              "pick _cardname_ | adds _cardname_ to your drafted cards and passes the pack. alternatively use packindex instead of cardname")
+              "pick _cardID_ | adds _cardID_ to your drafted cards and passes the pack. _cardID_ can be name or index.")
         prefill = ""
         while(True):
             inputString = rlinput("Command: ", prefill)
+            commands = chopItUp(inputString," ")
             prefill=""
             status=0
             if(inputString.startswith("display1") or inputString.startswith("d1")):
@@ -173,8 +253,7 @@ def makePick(player, pack):
             elif(inputString.startswith("list2") or inputString.startswith("l2")):
                 print(str(cardsDrafted))
             elif(inputString.startswith("pick ") or inputString.startswith("p ")):
-                i = inputString.find(" ")
-                cardname = inputString[(i+1):]
+                cardname = commands[1]
                 try:
                     ind = int(cardname)
                     if(ind < len(pack)):
@@ -184,46 +263,16 @@ def makePick(player, pack):
                         pack.remove(info)
                         return info
                 except:
-                    #dummy line
-                    status = 0
-                try:
-                    x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                except:
-                    print("Could not connect to Scryfall. Maybe check your internet connection.")
-                    status = -1
-                if(status != -1):
-                    object,info = analyseObject(x)
-                    if(object == "card"):
-                        print("Card name is " + info)
-                        if(info in pack):
-                            cardsDrafted.append(info)
-                            pack.remove(info)
-                            return info
-                        else:
-                            print("The card \"" + info + "\" is not in this pack")
-                            prefill = inputString
+                    ind = getIndexFuzzy(cardname,pack)
+                    if(ind != -1):
+                        info = pack[ind]
+                        print("You picked " + info +".")
+                        cardsDrafted.append(info)
+                        pack.remove(info)
+                        return info
                     else:
-                        print("Error type is " + info)
-                        #if not found tries again with exact command if ambiguous
-                        if(info == "ambiguous"):
-                            time.sleep(0.1)
-                            try: 
-                                x = requests.get('https://api.scryfall.com/cards/named?exact=' + inputString, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
-                                object,info = analyseObject(x)
-                            except:
-                                print("Could not connect to Scryfall. Maybe check your internet connection.")
-                                status = -1
-                        if(object == "card"):
-                            print("Card name is " + info)
-                            if(info in pack):
-                                cardsDrafted.append(info)
-                                pack.remove(info)
-                                return info
-                            else:
-                                print("The card \"" + info + "\" is not in this pack")
-                                prefill = inputString
-                        else:
-                            prefill = inputString
+                        print("No card starting with" + cardname + "\" is in this pack")
+                        prefill = inputString
             else:
                 print("Command was not recognized")
                 prefill=inputString
