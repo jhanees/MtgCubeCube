@@ -206,13 +206,13 @@ def saveLog(draftLog, players):
     file.close()
 
 def saveDeck(playername,deck,sideboard):
-    if(not os.path.exists(f"draftdecks/{playername}")):
-        file = open(f"draftdecks/{playername}", "w")
+    if(not os.path.exists(f"draftdecks/{playername}.dec")):
+        file = open(f"draftdecks/{playername}.dec", "w")
     else:
         i = 1
         while i > 0:
-            if(not os.path.exists(f"draftdecks/{playername}" + str(i))):
-                file = open(f"draftdecks/{playername}" + str(i), "w")
+            if(not os.path.exists(f"draftdecks/{playername}" + str(i) + ".dec")):
+                file = open(f"draftdecks/{playername}" + str(i) + ".dec", "w")
                 i = -2
             i = i+1
     file.write(f"//{playername}\n")
