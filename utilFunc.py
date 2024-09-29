@@ -253,7 +253,7 @@ def makePick(player, pack):
             elif(inputString.startswith("list2") or inputString.startswith("l2")):
                 print(str(cardsDrafted))
             elif(inputString.startswith("pick ") or inputString.startswith("p ")):
-                cardname = commands[1]
+                cardname = inputString[(inputString.find(" ")+1):]
                 try:
                     ind = int(cardname)
                     if(ind < len(pack)):
@@ -271,7 +271,7 @@ def makePick(player, pack):
                         pack.remove(info)
                         return info
                     else:
-                        print("No card starting with" + cardname + "\" is in this pack")
+                        print("No card starting with " + cardname + "\" is in this pack")
                         prefill = inputString
             else:
                 print("Command was not recognized")
