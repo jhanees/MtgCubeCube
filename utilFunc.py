@@ -178,7 +178,7 @@ def savedraftedcards(playername, cardsDrafted):
     file.write(";;")
     file.close()
 
-def saveLog(draftLog):
+def saveLog(draftLog, players):
     logname = input("Choose name for the draft Log file:")
     if(not os.path.exists(f"draftlogs/{logname}")):
         file = open(f"draftlogs/{logname}", "w")
@@ -189,7 +189,9 @@ def saveLog(draftLog):
                 file = open(f"draftlogs/{logname}" + str(i), "w")
                 i = -2
             i = i+1
-    file.write("Draft Log:\n")
+    file.write("Draft Log Version 2:\n")
+    for player in players:
+        file.write(str(player) + "\n")
     for roundnumber in range(0,len(draftLog)):
         file.write(f"Round {roundnumber}:\n")
         for packnumber in range(0,len(draftLog[roundnumber])):
@@ -201,6 +203,154 @@ def saveLog(draftLog):
     file.write(";;;")
     file.close()
 
+def saveDeck(playername,deck,sideboard):
+    if(not os.path.exists(f"draftdecks/{playername}")):
+        file = open(f"draftdecks/{playername}", "w")
+    else:
+        i = 1
+        while i > 0:
+            if(not os.path.exists(f"draftdecks/{playername}" + str(i))):
+                file = open(f"draftdecks/{playername}" + str(i), "w")
+                i = -2
+            i = i+1
+    file.write(f"//{playername}\n")
+    for card in set(deck):
+        count = deck.count(card)
+        file.write(f"{count} {card}\n")
+    for card in set(sideboard):
+        count = sideboard.count(card)
+        file.write(f"SB: {count} {card}\n")
+    file.close()
+
+def buildDeck(playername, sideboard):
+    deck = []
+    print(f"\nYou are now in deck building mode {playername}.")
+    print(f"You have drafted the following cards: {listToString(sideboard)}\nThey all start in the sideboard.")
+    options = ("Options:\n" +
+          "display1 | displays the deck and sideboard\n" + 
+          "display2 | displays the deck\n" + 
+          "display3 | displays your sideboard\n" +
+          "list1 | lists the deck and sideboard\n" +
+          "list2 | lists your deck\n" +
+          "list3 | lists your sideboard\n" +
+          "add _cardID_ | adds card _cardID_ to your deck from your sideboard\n" +
+          "remove _cardID_ | moves card _cardID_ from your deck to your sideboard\n" +
+          "addBasics _basicID_ _number_ | adds _number_ copies of the basic land _basicID_ to your deck\n" +
+          "options | displays this menu" +
+          "done | ends deck building mode")
+    print(options)
+    prefill = ""
+    while(True):
+        inputString = rlinput("Command:", prefill)
+        commands = chopItUp(inputString," ")
+        prefill=""
+        if(inputString.startswith("display1") or inputString.startswith("d1")):
+            if(len(commands) > 1):
+                numStr = commands[1]
+                try:
+                    num = int(numStr)
+                except:
+                    print("bad input!")
+                    num = 1000
+            else:
+                num = 1000
+            num = 1000
+            displayList(deck + ["decksideboarddivider"] + sideboard,num)
+        elif(inputString.startswith("list1") or inputString.startswith("l1")):
+            print("Deck:" + listToString(deck))
+            print("Sideboard:" + listToString(sideboard))
+        elif(inputString.startswith("display2") or inputString.startswith("d2")):
+            if(len(commands) > 1):
+                numStr = commands[1]
+                try:
+                    num = int(numStr)
+                except:
+                    print("bad input!")
+                    num = 1000
+            else:
+                num = 1000
+            num = 1000
+            displayList(deck,num)
+        elif(inputString.startswith("list2") or inputString.startswith("l2")):
+            print(listToString(deck))
+        elif(inputString.startswith("display3") or inputString.startswith("d3")):
+            if(len(commands) > 1):
+                numStr = commands[1]
+                try:
+                    num = int(numStr)
+                except:
+                    print("bad input!")
+                    num = 1000
+            else:
+                num = 1000
+            num = 1000
+            displayList(sideboard,num)
+        elif(inputString.startswith("list3") or inputString.startswith("l3")):
+            print(listToString(sideboard))
+        elif(inputString.startswith("add ") or inputString.startswith("a ")):
+            cardname = inputString[(inputString.find(" ")+1):]
+            try:
+                ind = int(cardname)
+                if(ind < len(sideboard)):
+                    info = sideboard[ind]
+                    print("The chosen card is " + info +".")
+                    deck.append(info)
+                    sideboard.remove(info)
+            except:
+                ind = getIndexFuzzy(cardname,sideboard)
+                if(ind != -1):
+                    info = sideboard[ind]
+                    print(info +" added to the deck.")
+                    deck.append(info)
+                    sideboard.remove(info)
+                else:
+                    print("No card starting with \"" + cardname + "\" is in the sideboard")
+                    prefill = inputString
+        elif(inputString.startswith("remove ") or inputString.startswith("rm ")):
+            cardname = inputString[(inputString.find(" ")+1):]
+            try:
+                ind = int(cardname)
+                if(ind < len(deck)):
+                    info = deck[ind]
+                    print(info +" moved to the sideboard.")
+                    sideboard.append(info)
+                    deck.remove(info)
+            except:
+                ind = getIndexFuzzy(cardname,deck)
+                if(ind != -1):
+                    info = deck[ind]
+                    print(info +" moved to the sideboard.")
+                    sideboard.append(info)
+                    deck.remove(info)
+                else:
+                    print("No card starting with \"" + cardname + "\" is in the deck")
+                    prefill = inputString
+        elif(inputString.startswith("done") or inputString.startswith("q ")):
+            break
+        elif(inputString.startswith("o") or inputString.startswith("O")):
+            print(options)
+        elif(inputString.lower().startswith("addbasics ") or inputString.lower().startswith("ab ")):
+            type = commands[1]
+            if(len(commands) > 2):
+                try:
+                    number = int(commands[2])
+                except ValueError:
+                    print("bad input!")
+                    number = 1
+            else:
+                number = 1
+            Basics = ["Plains","Island","Swamp","Mountain","Forest"]
+            ind = getIndexFuzzy(type, Basics)
+            if(ind != -1):
+                for i in range(number):
+                    deck.append(Basics[ind])
+            else:
+                print(f"Basic land {commands[1]} was not recognized.")
+        else:
+            print("Command was not recognized")
+            prefill=inputString
+    saveDeck(playername,deck,sideboard)
+
 def makePick(player, pack):
     (playertype, playername, cardsDrafted) = player
     if(playertype == "bot"):
@@ -208,7 +358,7 @@ def makePick(player, pack):
         cardsDrafted.append(pick)
         return pick
     elif(playertype == "local"): 
-        print("\nIt is now your turn to pick.")
+        print(f"\nIt is now your turn to pick {playername}.")
         print("The pack consists of the following cards: " + listToString(pack))
         print("Options:\n" +
               "display1 | displays the pack\n" + 
@@ -223,17 +373,16 @@ def makePick(player, pack):
             prefill=""
             status=0
             if(inputString.startswith("display1") or inputString.startswith("d1")):
-                i = inputString.find(" ")
-                numStr = "500"
-                num = 1000
-                if (i != -1):
-                    numStr = inputString[(i+1):]
-                    inputString = inputString[:i]
+                if(len(commands) > 1):
+                    numStr = commands[1]
                     try:
                         num = int(numStr)
                     except:
                         print("bad input!")
                         num = 1000
+                else:
+                    num = 1000
+                num = 1000
                 displayList(pack,num)
             elif(inputString.startswith("list1") or inputString.startswith("l1")):
                 print(listToString(pack))
@@ -271,7 +420,7 @@ def makePick(player, pack):
                         pack.remove(info)
                         return info
                     else:
-                        print("No card starting with " + cardname + "\" is in this pack")
+                        print("No card starting with \"" + cardname + "\" is in this pack")
                         prefill = inputString
             else:
                 print("Command was not recognized")
@@ -298,7 +447,8 @@ def draft(packs,players,draftroundnum):
         while(packsDone < len(roundpacks)):
             for playerind in range(len(players)):
                 if(packnextplayer[playernextpack[playerind]] == playerind):
-                    draftorderbypack[playernextpack[playerind]].append(makePick(players[playerind],roundpacks[playernextpack[playerind]]))
+                    playertype, playername, cardsDrafted = players[playerind]
+                    draftorderbypack[playernextpack[playerind]].append((makePick(players[playerind],roundpacks[playernextpack[playerind]]),playername))
                     if(len(roundpacks[playernextpack[playerind]]) == 0):
                         packnextplayer[playernextpack[playerind]] = -1
                         packsDone = packsDone + 1
@@ -307,11 +457,10 @@ def draft(packs,players,draftroundnum):
                     playernextpack[playerind] = (playernextpack[playerind] +1- 2 * roundparity) % len(roundpacks)
             time.sleep(0.1)
         draftlog.append(draftorderbypack)
-    for (playertype,a,cardsDrafted) in players:
-        if(playertype == "local"):
-            savedraftedcards(a,cardsDrafted)
-    saveLog(draftlog)
-
+    saveLog(draftlog, players)
+    for (playertype2,a,cardsDrafted2) in players:
+        if(playertype2 == "local"):
+            buildDeck(a, cardsDrafted2)
         
 def dropLastLetter(word):
     return word[:len(word)-1]
