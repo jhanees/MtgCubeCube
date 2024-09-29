@@ -189,15 +189,17 @@ def saveLog(draftLog, players):
                 file = open(f"draftlogs/{logname}" + str(i), "w")
                 i = -2
             i = i+1
-    file.write("Draft Log Version 2:\n")
-    for player in players:
-        file.write(str(player) + "\n")
+    file.write("Draft Log Version 3:\n")
+    file.write("Players:\n")
+    for (playertype,playername,cardsDrafted) in players:
+        file.write(playername + ": " + playertype + "\n")
+    file.write(";\nDraft Picks:\n")
     for roundnumber in range(0,len(draftLog)):
         file.write(f"Round {roundnumber}:\n")
         for packnumber in range(0,len(draftLog[roundnumber])):
             file.write(f"Pack {packnumber}:\n")
-            for card in draftLog[roundnumber][packnumber]:
-                file.write(card + "\n")
+            for card,playername in draftLog[roundnumber][packnumber]:
+                file.write(card + "; " + playername + "\n")
             file.write(";\n")
         file.write(";;\n")
     file.write(";;;")
@@ -236,7 +238,7 @@ def buildDeck(playername, sideboard):
           "add _cardID_ | adds card _cardID_ to your deck from your sideboard\n" +
           "remove _cardID_ | moves card _cardID_ from your deck to your sideboard\n" +
           "addBasics _basicID_ _number_ | adds _number_ copies of the basic land _basicID_ to your deck\n" +
-          "options | displays this menu" +
+          "options | displays this menu\n" +
           "done | ends deck building mode")
     print(options)
     prefill = ""
@@ -325,7 +327,7 @@ def buildDeck(playername, sideboard):
                 else:
                     print("No card starting with \"" + cardname + "\" is in the deck")
                     prefill = inputString
-        elif(inputString.startswith("done") or inputString.startswith("q ")):
+        elif(inputString.startswith("done") or inputString.startswith("q")):
             break
         elif(inputString.startswith("o") or inputString.startswith("O")):
             print(options)
@@ -458,9 +460,9 @@ def draft(packs,players,draftroundnum):
             time.sleep(0.1)
         draftlog.append(draftorderbypack)
     saveLog(draftlog, players)
-    for (playertype2,a,cardsDrafted2) in players:
+    for (playertype2,playername2,cardsDrafted2) in players:
         if(playertype2 == "local"):
-            buildDeck(a, cardsDrafted2)
+            buildDeck(playername2, cardsDrafted2)
         
 def dropLastLetter(word):
     return word[:len(word)-1]

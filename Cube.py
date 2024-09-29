@@ -94,7 +94,7 @@ def editArchetypeMode(filename):
             elif(inputString.startswith("list") or inputString.startswith("l")):
                 print(listToString(cards))
             elif(inputString.startswith("remove ") or inputString.startswith("rm ")):
-                cardname = commands[1]
+                cardname = inputString[(inputString.find(" ")+1):]
                 #searches for card
                 try:
                     ind = int(cardname)
@@ -213,7 +213,7 @@ def editMode(archetypes, cubes):
             else:
                 print("Failed to specify an archetype identifier for the archetype to display.")
         elif(inputString.startswith("s ") or inputString.startswith("search ")):
-            cardnameprefix = commands[1]
+            cardnameprefix = inputString[(inputString.find(" ")+1):]
             try:
                 x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardnameprefix, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
                 object,info = analyseObject(x)
@@ -279,8 +279,8 @@ def mainMenu(archetypes, cubes):
             "bot draft | start a bot draft\n" +
             "options | displays this menu\n" +
             "quit | ends this programm")
-    print(options)
     while(True):
+        print(options)
         inputString = input("Command: ")
         if (inputString.startswith("q")):
             break
@@ -324,7 +324,8 @@ def mainMenu(archetypes, cubes):
                         else:
                             print("Cardname " + card + " not found.")
         elif(inputString.startswith("bot draft")  or inputString.startswith("bd")):
-            while(True):
+            done = False
+            while(not done):
                 name = input("Which cube would you like to draft?\nPress l for a list of all available cubes, otherwise enter the name or index of the Cube\nCommand:")
                 if(name == "l"):
                     print(f"Cubes:{listToString(cubes)}")
@@ -333,14 +334,14 @@ def mainMenu(archetypes, cubes):
                     if(ind != -1):
                         print("You chose to draft cube " + cubes[ind] + ".")
                         cubing(cubes[ind])
-                        break
+                        done = True
                     else:
                         try:
                             ind = int(name)
                             if(ind < len(cubes)):
                                 print("Chosen cube is " + cubes[ind] + ".")
                                 cubing(cubes[ind])
-                                break
+                                done = True
                         except:
                             print("The name of the cube was not recognized. Please try again.")
 if __name__ == "__main__":

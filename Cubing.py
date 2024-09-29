@@ -248,7 +248,7 @@ def cubemode(filename, archetypes, cubes):
         elif(inputString.startswith("list") or inputString.startswith("l")):
             print(cards)
         elif(inputString.startswith("removecard ") or inputString.startswith("rc ")):
-            cardname = commands[1]
+            cardname = inputString[(inputString.find(" ")+1):]
             #searches for card
             object = ""
             info = ""
@@ -296,7 +296,7 @@ def cubemode(filename, archetypes, cubes):
                 else:
                     print("Archetype starting with " + archetypename + " not found and thus could not be removed.")
         elif(inputString.startswith("addcard ") or inputString.startswith("ac ")):
-            cardname = commands[1]
+            cardname = inputString[(inputString.find(" ")+1):]
             try:
                 x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + cardname, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
             except:
