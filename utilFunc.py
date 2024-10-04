@@ -239,6 +239,7 @@ def buildDeck(playername, sideboard):
           "remove _cardID_ | moves card _cardID_ from your deck to your sideboard\n" +
           "addBasics _basicID_ _number_ | adds _number_ copies of the basic land _basicID_ to your deck\n" +
           "options | displays this menu\n" +
+          "discard deck | ands deck building move WITHOUT saving the deck\n" +
           "done | ends deck building mode")
     print(options)
     prefill = ""
@@ -328,6 +329,9 @@ def buildDeck(playername, sideboard):
                     print("No card starting with \"" + cardname + "\" is in the deck")
                     prefill = inputString
         elif(inputString.startswith("done") or inputString.startswith("q")):
+            saveDeck(playername,deck,sideboard)
+            break
+        elif(inputString.startswith("discard deck")):
             break
         elif(inputString.startswith("o") or inputString.startswith("O")):
             print(options)
@@ -351,7 +355,6 @@ def buildDeck(playername, sideboard):
         else:
             print("Command was not recognized")
             prefill=inputString
-    saveDeck(playername,deck,sideboard)
 
 def makePick(player, pack):
     (playertype, playername, cardsDrafted) = player
@@ -476,6 +479,56 @@ def readArchetype(filename):
         namesSpace = file.readlines()
         names = list(map(dropLastLetter,namesSpace))
         return names
+    
+def readAttributes():
+    cardAttributes = {}
+    file = open("cardAttributes.txt","r")
+    lines = file.readlines()
+    for line in lines:
+        ind = line.find("*")
+        if(ind == -1):
+            continue
+        cardname = line[:ind]
+        cardAttributes[cardname]= {}
+        while(True):
+            skind = line.find("'", ind) +1
+            if(skind == 0):
+                break
+            ekind = line.find("'", skind)
+            if(ekind == -1):
+                break
+            key = line[skind:ekind]
+            svind = line.find("'", ekind +1) +1
+            if(svind == 0):
+                break
+            evind = line.find("'", svind)
+            if(evind == -1):
+                break
+            value = line[svind:evind]
+            if(key == "cmc"):
+                try: 
+                    cardAttributes[cardname][key] = int(value)
+                except ValueError:
+                    print(f"could not convert {value} to int")
+            elif(key in ["colors", "color_identity", "produced_mana"]):
+                cardAttributes[cardname][key] = []
+                for color in ["W","U","B","R","G","C"]:
+                    if value.find(color) != -1:
+                        cardAttributes[cardname][key].append(color)
+            elif(key in ["type_line"]):
+                cardAttributes[cardname][key] = []
+                for cardtype in ["Creature","Sorcery","Instant","Land","Artifact","Enchantment","Planeswalker"]:
+                    if value.find(cardtype) != -1:
+                        cardAttributes[cardname][key].append(cardtype)
+            elif(key in ["mana_cost"]):
+                cardAttributes[cardname][key] = {"W": 0 ,"U": 0 ,"B": 0 ,"R": 0 ,"G": 0 ,"C": 0}
+                for color in ["W","U","B","R","G","C"]:
+                    cardAttributes[cardname][key][color] = .5 * value.count('{' + color) + .5 * value.count(color + '}')
+            ind = evind + 1
+    print(cardAttributes)
+    return cardAttributes
+
+
 
 #checks whether x is card or error and searches for additional info
 def analyseObject(x):
@@ -488,10 +541,44 @@ def analyseObject(x):
         name = findAttribute(x.text,'name')
         return object,name
 
+#checks whether x is card or error and searches up card attributes, then returns them in a dict
+def deeplyAnalyseObject(x):
+    object = findAttribute(x.text,'object')
+    if(object == "error"):
+        type = findAttribute(x.text,'type')
+        print(x.text)
+        return object,type
+    if(object == "card"):
+        attributes = {}
+        value = findAttribute(x.text,"colors",None,'[',']')
+        if(value != "error"):
+            attributes["colors"] = value
+        value = findAttribute(x.text,"color_identity",None,'[',']')
+        if(value != "error"):
+            attributes["color_identity"] = value
+        value = findAttribute(x.text,"produced_mana",None,'[',']')
+        if(value != "error"):
+            attributes["produced_mana"] = value
+        value = findAttribute(x.text,"mana_cost")
+        if(value != "error"):
+            attributes["mana_cost"] = value
+        value = findAttribute(x.text,"type_line")
+        if(value != "error"):
+            attributes["type_line"] = value
+        value = findAttribute(x.text,"cmc",None,':',',')
+        if(value != "error"):
+            attributes["cmc"] = value
+        return object,attributes
+
+
 #checks for value of att within str, searches for subatt after att if subatt is given
-def findAttribute(str, att, subatt=None):
+def findAttribute(str, att, subatt=None, frontsymbol = '"', backsymbol = '"'):
     tind = str.find(att)
-    tind = str.find('"',tind+1+len(att))
+    if(tind == -1):
+        return "error"
+    tind = str.find(frontsymbol,tind+1+len(att))
+    if(tind == -1):
+        return "error"
     i = tind + 1
     content = ""
     if(subatt != None):
@@ -503,11 +590,12 @@ def findAttribute(str, att, subatt=None):
             i = i+1
         return content
     else:
-        while(str[i] != '"'):
+        while(str[i] != backsymbol):
             content += str[i]
             i = i+1
         return content
 
+#searches up the card 'name' on scryfall and, if found, saves the image to images/'name'.jpg
 def downloadImage(name):
     time.sleep(0.1)
     try:
@@ -526,6 +614,7 @@ def downloadImage(name):
     shutil.copyfileobj(x.raw,file)
     file.close()
     return 0
+
 
 def displayList(namestodisplay, size=30):
     pics = []

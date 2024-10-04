@@ -1,6 +1,8 @@
 self adjusting random cubes
 hosting draft
 joining draft
+implement draft sets (seeded packs)
+GUI for drafting
 
 draft bot ai:
     recognizing colors

@@ -218,6 +218,7 @@ def cubemode(filename, archetypes, cubes):
                "back | goes back to the main menu"]
     for o in Options:
         print(o)
+    prefill = ""
     while(True):
         inputString = rlinput("Cube " + filename + ": ", prefill)
         prefill = ""
@@ -321,7 +322,7 @@ def cubemode(filename, archetypes, cubes):
                         cards.append(info)
         elif(inputString.startswith("addarchetype ") or inputString.startswith("aa ")):
             archetypename = commands[1]
-            if(commands > 2):
+            if(len(commands) > 2):
                 cardnumberStr = commands[2]
                 try:
                     cardnumber = int(cardnumberStr)

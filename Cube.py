@@ -9,7 +9,7 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString, getIndexFuzzy, chopItUp, sortArchetypes
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString, getIndexFuzzy, chopItUp, sortArchetypes, deeplyAnalyseObject, readAttributes
 from Cubing import cubemode, cubing
 
 #initializes the ini File[deprecated]
@@ -299,6 +299,38 @@ def mainMenu(archetypes, cubes):
         elif(inputString.startswith("join draft")  or inputString.startswith("jd")):
             #TODO
             time.sleep(0.1)
+        elif(inputString.startswith("get card attributes")  or inputString.startswith("gca")):
+            cardAttributes = {}
+            for a in archetypes:
+                if (os.path.exists("archetypes/" + a) == False):
+                    print("Filename " + a + " does not exist")
+                else:
+                    file = open("archetypes/" + a, "r")
+                    cardsPlus = file.readlines()
+                    cards = list(map(dropLastLetter,cardsPlus))
+                    file.close()
+                    for card in cards:
+                        status = 0
+                        time.sleep(0.05)
+                        try:
+                            x = requests.get('https://api.scryfall.com/cards/named?fuzzy=' + card, headers = {"User-Agent" : "MtgCubeCube", "Accept" : "*/*"})
+                        except:
+                            print("Contacting scryfall failed.")
+                            status = -1
+                        if(status != -1):
+                            object,info = deeplyAnalyseObject(x)
+                            if(object == "card"):
+                                cardAttributes[card] = info
+                                print(info)
+                        else:
+                            print("Cardname " + card + " not found.")
+                    print("Finished analysing " + a)
+            file = open("cardAttributes.txt", "w")
+            file.write("Cards:\n")
+            for cardname in cardAttributes:
+                file.write(cardname + '*: ' + str(cardAttributes[cardname]) + "\n")
+            file.write(";;")
+            file.close()
         elif(inputString.startswith("debug")  or inputString.startswith("db")):
             for a in archetypes:
                 if (os.path.exists("archetypes/" + a) == False):
@@ -316,6 +348,8 @@ def mainMenu(archetypes, cubes):
                         except:
                             print("Contacting scryfall failed.")
                             status = -1
+                        print(x.text)
+                        break
                         if(status != -1):
                             object,info = analyseObject(x)
                             if(object == "card"):
