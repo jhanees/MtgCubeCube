@@ -410,12 +410,13 @@ def mainMenu(archetypes, cubes):
                     else:
                         try:
                             ind = int(name)
-                            if(ind < len(cubes)):
+                        except ValueError:
+                            print("The name of the cube was not recognized. Please try again.")
+                            ind = -1
+                        if(ind < len(cubes) and ind != -1):
                                 print("Chosen cube is " + cubes[ind] + ".")
                                 cubing(cubes[ind])
                                 done = True
-                        except:
-                            print("The name of the cube was not recognized. Please try again.")
 if __name__ == "__main__":
     #init
     archetypes = []

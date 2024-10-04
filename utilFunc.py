@@ -172,7 +172,7 @@ def sortArchetypes(archetypesUnsorted):
     return archetypes
 
 #make the bot AI pick a card from the pack
-def Botpick(pack, cardsDrafted):
+def Botpick(pack, cardsDrafted,cardAttributes):
     return pack.pop(random.randrange(0,len(pack)))
 
 def savedraftedcards(playername, cardsDrafted):
@@ -412,10 +412,10 @@ def buildDeck(playername, sideboard):
             print("Command was not recognized")
             prefill=inputString
 
-def makePick(player, pack):
+def makePick(player, pack, cardAttributes):
     (playertype, playername, cardsDrafted) = player
     if(playertype == "bot"):
-        pick = Botpick(pack,cardsDrafted)
+        pick = Botpick(pack,cardsDrafted,cardAttributes)
         cardsDrafted.append(pick)
         return pick
     elif(playertype == "local"): 
@@ -487,7 +487,7 @@ def makePick(player, pack):
                 print("Command was not recognized")
                 prefill=inputString
 
-def draft(packs,players,draftroundnum):
+def draft(packs,players,draftroundnum, cardAttributes):
     if(draftroundnum * len(players) > len(packs)):
         print("Drafting with " + str(len(players)) + " players for " + str(draftroundnum) + " rounds requires " + str(draftroundnum * len(players)) + " packs but there are only " + str(len(packs)) + " packs.")
         return
@@ -509,7 +509,7 @@ def draft(packs,players,draftroundnum):
             for playerind in range(len(players)):
                 if(packnextplayer[playernextpack[playerind]] == playerind):
                     playertype, playername, cardsDrafted = players[playerind]
-                    draftorderbypack[playernextpack[playerind]].append((makePick(players[playerind],roundpacks[playernextpack[playerind]]),playername))
+                    draftorderbypack[playernextpack[playerind]].append((makePick(players[playerind],roundpacks[playernextpack[playerind]],cardAttributes),playername))
                     if(len(roundpacks[playernextpack[playerind]]) == 0):
                         packnextplayer[playernextpack[playerind]] = -1
                         packsDone = packsDone + 1
@@ -535,17 +535,36 @@ def readArchetype(filename):
         namesSpace = file.readlines()
         names = list(map(dropLastLetter,namesSpace))
         return names
-    
-def readAttributes():
-    cardAttributes = {}
-    file = open("cardAttributes.txt","r")
-    lines = file.readlines()
+
+def readCardRatings():
+    cardRatings = {}
+    file = open("cardratings.txt", "r")
+    linesSpace = file.readlines()
+    file.close()
+    lines = list(map(dropLastLetter,linesSpace))
     for line in lines:
         ind = line.find("*")
         if(ind == -1):
             continue
         cardname = line[:ind]
-        cardAttributes[cardname]= {}
+        try:
+            rating = int(line[ind+3:])
+        except:
+            rating = 1000
+        cardRatings[cardname] = rating
+    return cardRatings
+
+def readAttributes():
+    cardAttributes = {}
+    file = open("cardAttributes.txt","r")
+    lines = file.readlines()
+    file.close()
+    for line in lines:
+        ind = line.find("*")
+        if(ind == -1):
+            continue
+        cardname = line[:ind]
+        cardAttributes[cardname]= {"Rating": 1000}
         while(True):
             skind = line.find("'", ind) +1
             if(skind == 0):
@@ -562,6 +581,9 @@ def readAttributes():
                 break
             value = line[svind:evind]
             if(key == "cmc"):
+                pointind = value.find(".")
+                if(pointind != -1):
+                    value = value[:pointind]
                 try: 
                     cardAttributes[cardname][key] = int(value)
                 except ValueError:
@@ -581,10 +603,11 @@ def readAttributes():
                 for color in ["W","U","B","R","G","C"]:
                     cardAttributes[cardname][key][color] = .5 * value.count('{' + color) + .5 * value.count(color + '}')
             ind = evind + 1
-    print(cardAttributes)
+    cardRatings = readCardRatings()
+    for card in cardRatings:
+        if card in cardAttributes:
+            cardAttributes[card]["Rating"] = cardRatings[card]
     return cardAttributes
-
-
 
 #checks whether x is card or error and searches for additional info
 def analyseObject(x):

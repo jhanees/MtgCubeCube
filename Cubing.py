@@ -3,7 +3,7 @@ import requests
 import time
 import sys
 import os.path
-from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, listToString, getIndexFuzzy, rlinput, chopItUp
+from utilFunc import analyseObject, readArchetype, displayList, dropLastLetter, draft, listToString, getIndexFuzzy, rlinput, chopItUp, readAttributes
 
 #get _number_ elements from list
 def getElements(list, number):
@@ -31,6 +31,7 @@ def cubing(filename):
         print("Error!")
     else:
         cubetype, cards, archetypesAdded = readCube(filename)
+        cardAttributes = readAttributes()
         packsizeStr = input("Choose packsize:")
         try:
             packsize = int(packsizeStr)
@@ -74,7 +75,7 @@ def cubing(filename):
         while(len(players) < playernumber):
             players.append(("bot","Bot N°" + str(i),[]))
             i = i + 1
-        draft(packs,players,draftroundnum)
+        draft(packs,players,draftroundnum,cardAttributes)
 
     #print("waiting for players...")
     #listen to join requests and accept players
