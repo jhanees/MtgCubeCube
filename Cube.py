@@ -9,7 +9,8 @@ import random
 from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
-from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString, getIndexFuzzy, chopItUp, sortArchetypes, deeplyAnalyseObject, readAttributes
+from utilFunc import readArchetype, display, displayList, analyseObject, dropLastLetter, rlinput, listToString, getIndexFuzzy, chopItUp, sortArchetypes
+from utilFunc import readLog, deeplyAnalyseObject, readAttributes, calcRatings
 from Cubing import cubemode, cubing
 
 #initializes the ini File[deprecated]
@@ -299,6 +300,43 @@ def mainMenu(archetypes, cubes):
         elif(inputString.startswith("join draft")  or inputString.startswith("jd")):
             #TODO
             time.sleep(0.1)
+        elif(inputString.startswith("calc card ratings")  or inputString.startswith("ccr")):
+            cardRatings = {}
+            cardPicks = {}
+            cardExpectedPicks = {}
+            logs = [f for f in os.listdir("draftlogs/") if os.path.isfile(os.path.join("draftlogs/", f))]
+            for logname in logs:
+                humanplayers = []
+                players,packs = readLog(logname)
+                print(str(players))
+                print(str(packs))
+                for (player,type) in players:
+                    if(type == "local"):
+                        humanplayers.append(player)
+                for pack in packs:
+                    for ind in range(len(pack)):
+                        (card, player) = pack[ind]
+                        if player in humanplayers:
+                            for rind in range(ind,len(pack)):
+                                (card2, player2) = pack[rind]
+                                if card2 not in cardPicks:
+                                    cardPicks[card2] = 0
+                                if card2 not in cardRatings:
+                                    cardRatings[card2] = 1000
+                                if card2 not in cardExpectedPicks:
+                                    cardExpectedPicks[card2] = 0
+                                #TODO adjust using ratings
+                                cardExpectedPicks[card2] = cardExpectedPicks[card2] + 1/(len(pack)-ind)
+                            cardPicks[card] = cardPicks[card] + 1
+            print(cardRatings)
+            cardRatings = calcRatings(cardRatings,cardPicks,cardExpectedPicks)
+            print(cardRatings)
+            file = open("cardratings.txt", "w")
+            file.write("Card Ratings:\n")
+            for cardname in cardRatings:
+                file.write(cardname + '*: ' + str(int(cardRatings[cardname])) + "\n")
+            file.write(";;")
+            file.close()
         elif(inputString.startswith("get card attributes")  or inputString.startswith("gca")):
             cardAttributes = {}
             for a in archetypes:

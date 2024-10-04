@@ -1,0 +1,1326 @@
+Card Ratings:
+Savage Lands*: 1070
+Whisper, Blood Liturgist*: 964
+Reflector Mage*: 986
+Angel of Deliverance*: 949
+Tolaria West*: 975
+Vile Entomber*: 972
+Start from Scratch*: 975
+Spring // Mind*: 964
+Pest Summoning*: 1018
+Vizier of Tumbling Sands*: 971
+Furnace of Rath*: 975
+Scalestorm Summoner*: 978
+Enthusiastic Study*: 940
+Negate*: 1015
+Kinjalli's Sunwing*: 981
+Swords to Plowshares*: 1046
+Electrostatic Infantry*: 1039
+Burning-Fist Minotaur*: 984
+Dead Revels*: 968
+Flourishing Fox*: 992
+Divide by Zero*: 1034
+Planewide Celebration*: 992
+Drannith Healer*: 1006
+Scrapwork Cohort*: 1034
+Titanoth Rex*: 983
+Kitchen Imp*: 974
+Eldrazi Devastator*: 978
+Mulch*: 958
+Tragic Fall*: 944
+Nightmare Shepherd*: 1046
+Glint-Nest Crane*: 996
+Bloodhall Priest*: 985
+Wooded Ridgeline*: 944
+Skewer the Critics*: 1016
+Arbiter of Knollridge*: 977
+Wizard's Lightning*: 981
+Arborback Stomper*: 1034
+Growth Spiral*: 1031
+Thrill of Possibility*: 1021
+Explosive Derailment*: 960
+Decree of Justice*: 937
+Deem Worthy*: 977
+Path to the World Tree*: 1045
+Savai Thundermane*: 1037
+Arcane Proxy*: 989
+The Modern Age // Vector Glider*: 1074
+Promise of Bunrei*: 995
+Lonely Sandbar*: 1059
+Dismal Backwater*: 991
+Containment Breach*: 968
+Late to Dinner*: 1025
+Sigil Tracer*: 1020
+Graypelt Refuge*: 947
+Sindbad*: 963
+Environmental Sciences*: 1088
+Eldrazi Skyspawner*: 1028
+Arcane Subtraction*: 982
+Panoptic Mirror*: 985
+Imoti, Celebrant of Bounty*: 990
+Collective Effort*: 979
+Ghitu Journeymage*: 1025
+Akroma, Angel of Wrath*: 985
+Llanowar Loamspeaker*: 1009
+Reptilian Reflection*: 999
+Field Trip*: 954
+Caller of the Untamed*: 1041
+Sunlit Marsh*: 1000
+Elemental Summoning*: 1009
+Hollow One*: 988
+Glint-Horn Buccaneer*: 983
+Naban, Dean of Iteration*: 991
+Burning Wish*: 995
+Inkling Summoning*: 1037
+Icatian Crier*: 1010
+Chillbringer*: 965
+Retriever Phoenix*: 1131
+Frenzied Goblin*: 991
+Knight of Autumn*: 967
+Annoyed Altisaur*: 978
+Kabira Takedown // Kabira Plateau*: 994
+Crypt Incursion*: 990
+Ad Nauseam*: 994
+Unscrupulous Contractor*: 994
+The Underworld Cookbook*: 1040
+Animate Dead*: 1080
+Codex Shredder*: 993
+Introduction to Annihilation*: 1073
+Essence Scatter*: 993
+Introduction to Prophecy*: 1045
+Savage Alliance*: 989
+Raucous Entertainer*: 958
+Samut, Tyrant Smasher*: 947
+Professor of Symbology*: 1195
+Oracle of Tragedy*: 1042
+Fires of Yavimaya*: 954
+Forgotten Cave*: 1030
+Spirit Summoning*: 1062
+Go for Blood*: 975
+Barren Moor*: 993
+Pyroclasm*: 996
+Viashino Sandsprinter*: 1083
+Akroma's Vengeance*: 1025
+Yavimaya Steelcrusher*: 985
+Reduce to Memory*: 959
+Mission Briefing*: 984
+Void Beckoner*: 949
+Novice Inspector*: 1039
+Breathless Knight*: 965
+Akroma's Blessing*: 1022
+Hushwing Gryff*: 963
+Eureka Moment*: 988
+The World Spell*: 969
+Lantern of the Lost*: 987
+Lightning Axe*: 990
+Jungle Shrine*: 1015
+Fateful Showdown*: 966
+Irregular Cohort*: 991
+Merfolk Looter*: 994
+Lazotep Chancellor*: 1021
+Forbidden Friendship*: 994
+Grand Melee*: 988
+Seaside Citadel*: 958
+Guttersnipe*: 974
+Nevinyrral's Disk*: 1045
+Oketra's Attendant*: 1006
+Crumbling Necropolis*: 969
+Rimrock Knight // Boulder Rush*: 968
+Faithless Salvaging*: 991
+Nemesis of Mortals*: 967
+Ravenous Rats*: 955
+Do-It-Yourself Seraph*: 983
+Destroy Evil*: 1020
+Jaya's Greeting*: 966
+Containment Construct*: 1045
+Geothermal Bog*: 1043
+Sylvan Ranger*: 968
+Devouring Tendrils*: 984
+Fiery Temper*: 1055
+Tangled Islet*: 959
+Goblin Welder*: 1038
+Undertaker*: 982
+Kutzil's Flanker*: 1028
+Thrashing Brontodon*: 978
+Cabal Initiate*: 973
+Jegantha, the Wellspring*: 1038
+Angrath's Marauders*: 979
+Academy Journeymage*: 978
+Hypergenesis*: 984
+Blood Beckoning*: 990
+Beastcaller Savant*: 962
+Settle Beyond Reality*: 1035
+Farfinder*: 1021
+Academic Dispute*: 1150
+Fires of Invention*: 927
+Guiding Voice*: 1069
+Jaya Ballard, Task Mage*: 965
+Eyetwitch*: 1033
+Valiant Rescuer*: 1028
+Rockslide Sorcerer*: 1006
+Mana Tithe*: 975
+Arcane Sanctum*: 1000
+Ashnod's Harvester*: 990
+Planar Disruption*: 985
+Apostle's Blessing*: 985
+Call the Bloodline*: 1020
+Westfold Rider*: 981
+Eternal Taskmaster*: 978
+Rooting Moloch*: 981
+Aven Eternal*: 1053
+Unburial Rites*: 1040
+Murder*: 1007
+Excavation Mole*: 984
+Militia Bugler*: 966
+Ghitu Lavarunner*: 985
+Asmoranomardicadaistinaculdacar*: 1020
+Sandsteppe Citadel*: 1028
+Affectionate Indrik*: 1052
+Jeskai Elder*: 981
+Chartooth Cougar*: 979
+Threnody Singer*: 980
+Keruga, the Macrosage*: 1029
+Study Break*: 1082
+Magus of the Will*: 969
+Crop Rotation*: 991
+Akawalli, the Seething Tower*: 991
+Reclamation Sage*: 986
+Breath of Life*: 983
+Expanded Anatomy*: 1086
+All That Glitters*: 966
+Mercurial Transformation*: 1022
+Drannith Stinger*: 957
+Abandoned Sarcophagus*: 975
+Flame of Anor*: 1071
+Samut, Voice of Dissent*: 995
+Surveilling Sprite*: 983
+Krark-Clan Ironworks*: 989
+Armored Scrapgorger*: 1031
+Ogre-Head Helm*: 1035
+Hoarding Dragon*: 996
+Cunning Wish*: 968
+Erratic Portal*: 1034
+Thopter Mechanic*: 996
+Gust Walker*: 982
+Sunder Shaman*: 988
+Haunted Mire*: 1045
+Control Magic*: 971
+Just the Wind*: 1026
+Akroma, Angel of Fury*: 971
+Sanctum Prelate*: 966
+Spider Spawning*: 972
+Rise of Extus*: 1037
+Citywide Bust*: 988
+Atemsis, All-Seeing*: 989
+Cloudblazer*: 1091
+Dragon Fodder*: 984
+Return to Nature*: 996
+Werebear*: 990
+Landroval, Horizon Witness*: 985
+Opulent Palace*: 1010
+Aven Mindcensor*: 1019
+Zenith Flare*: 981
+Spore Swarm*: 976
+Blighted Agent*: 955
+Duskwatch Recruiter // Krallenhorde Howler*: 1041
+Network Terminal*: 983
+Ilysian Caryatid*: 972
+Ominous Sphinx*: 991
+Loaming Shaman*: 988
+Memory Lapse*: 995
+Halana, Kessig Ranger*: 986
+Woodland Cemetery*: 965
+Frontier Bivouac*: 1095
+Braids's Frightful Return*: 979
+Tranquil Cove*: 974
+Bone Shards*: 1078
+Shadowstorm Vizier*: 981
+Idyllic Beachfront*: 972
+Martyr of Ashes*: 995
+Ghitu Amplifier*: 977
+Gifted Aetherborn*: 995
+Tura Kennerüd, Skyknight*: 969
+Drag to the Underworld*: 1019
+Specimen Collector*: 953
+Dwarven Forge-Chanter*: 958
+Writhing Necromass*: 979
+Wizard's Retort*: 965
+Sacred Peaks*: 966
+Kiln Fiend*: 995
+Scourge of the Skyclaves*: 995
+Savage Swipe*: 995
+Broodrage Mycoid*: 976
+Felidar Guardian*: 998
+Seeker of Insight*: 961
+Teachings of the Kirin // Kirin-Touched Orochi*: 1044
+Prosperous Pirates*: 989
+Kelpie Guide*: 982
+Spikefield Hazard // Spikefield Cave*: 994
+Run Away Together*: 976
+Callous Dismissal*: 990
+Acrobatic Maneuver*: 985
+Pitiless Vizier*: 956
+Necrotic Fumes*: 956
+Wrath of God*: 1133
+Eerie Soultender*: 989
+Quakefoot Cyclops*: 964
+Karmic Guide*: 1034
+Cloudkin Seer*: 989
+Out of Time*: 993
+Deranged Assistant*: 975
+Aeromoeba*: 983
+Bloodbraid Elf*: 1046
+Sweet Oblivion*: 996
+Blightcaster*: 990
+Nyx-Fleece Ram*: 996
+Knight of the Reliquary*: 996
+Galvanic Bombardment*: 1085
+Flame Jab*: 989
+Nimana Skydancer*: 989
+Calix, Destiny's Hand*: 989
+Seize the Spoils*: 989
+Priest of Urabrask*: 989
+Titania, Protector of Argoth*: 1046
+Prophetic Titan*: 996
+Call of the Death-Dweller*: 996
+Grisly Spectacle*: 996
+Shivan Fire*: 992
+Roost of Drakes*: 1040
+Uurg, Spawn of Turg*: 996
+Mine Collapse*: 1038
+Corpse Churn*: 988
+Death's Approach*: 988
+Serene Remembrance*: 984
+Fang of Shigeki*: 988
+Dawnglade Regent*: 1046
+Ruination Rioter*: 996
+Callaphe, Beloved of the Sea*: 996
+Memory Sluice*: 996
+Hazoret's Monument*: 996
+Enchantress's Presence*: 996
+Skeleton Key*: 996
+Eerie Interlude*: 1041
+Igneous Elemental*: 1036
+Belligerent Guest*: 986
+Take Inventory*: 976
+Indulgent Aristocrat*: 986
+Call to the Feast*: 995
+The Eldest Reborn*: 995
+Naomi, Pillar of Order*: 995
+Wedding Invitation*: 995
+Serpentine Curve*: 995
+Alabaster Host Intercessor*: 1033
+Inventive Iteration // Living Breakthrough*: 1033
+Desperate Farmer // Depraved Harvester*: 983
+Risen Riptide*: 983
+Road // Ruin*: 1045
+Chemister's Insight*: 995
+The Restoration of Eiganjo // Architect of Restoration*: 995
+Fact or Fiction*: 983
+Deathless Ancient*: 995
+Oath of Jace*: 991
+Captain Ripley Vance*: 1028
+Vodalian Mindsinger*: 1025
+Evolving Wilds*: 978
+Goblin Anarchomancer*: 995
+Shell Shield*: 995
+Cartouche of Strength*: 995
+Returned Centaur*: 995
+Soaring Thought-Thief*: 995
+Reclaim the Wastes*: 1016
+Vantress Gargoyle*: 970
+Rift Sower*: 1044
+Elfhame Druid*: 989
+The Trickster-God's Heist*: 983
+Breath of Darigaaz*: 1027
+Gandalf's Sanction*: 994
+Legion Vanguard*: 994
+Smoldering Crater*: 994
+The Birth of Meletis*: 981
+Cartouche of Zeal*: 1043
+Pestilence Demon*: 985
+Gluttonous Guest*: 993
+Merfolk Falconer*: 993
+Cartouche of Ambition*: 993
+Angel of the Dawn*: 988
+Manamorphose*: 1046
+Stensia Masquerade*: 996
+Nessian Wanderer*: 996
+Soul of Migration*: 1081
+Grapeshot*: 996
+Life // Death*: 970
+Sweltering Suns*: 1016
+Inner Fire*: 989
+Diligent Excavator*: 989
+Nighthawk Scavenger*: 989
+Astral Drift*: 1033
+D'Avenant Trapper*: 989
+Rushing River*: 985
+Trial of Strength*: 1043
+Into the Story*: 993
+Queen's Commission*: 993
+Thud*: 981
+Spirited Companion*: 993
+Overwhelmed Apprentice*: 993
+Forsake the Worldly*: 978
+Sanctum Seeker*: 993
+Centaur Vinecrasher*: 994
+Landscaper Colos*: 1021
+Sunken Hollow*: 994
+Astral Slide*: 1080
+Goblin Barrage*: 994
+Thought Reflection*: 994
+Jilt*: 989
+Ash Barrens*: 1085
+Didn't Say Please*: 995
+Think Twice*: 995
+In Bolas's Clutches*: 995
+Enigma Drake*: 995
+Glacial Grasp*: 995
+Gravebreaker Lamia*: 1043
+Desperate Ritual*: 1045
+Mindcrank*: 995
+Yavimaya Iconoclast*: 995
+Entrancing Lyre*: 991
+Era of Enlightenment // Hand of Enlightenment*: 995
+Thirst for Meaning*: 995
+Rhonas's Monument*: 1028
+Expedition Skulker*: 978
+Secrets of the Dead*: 978
+Season of Renewal*: 995
+Olivia, Mobilized for War*: 995
+Rosethorn Acolyte // Seasonal Ritual*: 995
+Banishing Slash*: 995
+Magma Jet*: 991
+Murasa Sproutling*: 1033
+Sanguine Statuette*: 983
+Perpetual Timepiece*: 983
+Natural Order*: 1018
+Mystic Monastery*: 1067
+Vine Gecko*: 996
+Charge*: 996
+Wrenn and Six*: 996
+Shapers' Sanctuary*: 996
+Lantern Bearer // Lanterns' Lift*: 1032
+Volcanic Torrent*: 1036
+Cut // Ribbons*: 986
+Hell's Caretaker*: 966
+Hunting Pack*: 986
+Assassin's Ink*: 986
+Throes of Chaos*: 1046
+Gut Shot*: 996
+Oriq Loremage*: 974
+Merfolk Windrobber*: 996
+Life of Toshiro Umezawa // Memory of Toshiro*: 1043
+Daring Archaeologist*: 996
+Quarry Beetle*: 996
+Zuran Orb*: 1038
+Undead Gladiator*: 977
+Talent of the Telepath*: 988
+Mystic Sanctuary*: 988
+Groundskeeper*: 988
+Forsaken Miner*: 988
+Tranquil Thicket*: 1046
+Zahid, Djinn of the Lamp*: 1036
+Tezzeret's Touch*: 991
+Trial of Knowledge*: 996
+Origin Spellbomb*: 980
+Rathi Trapper*: 996
+Repeal*: 996
+Dusk Legion Duelist*: 996
+Trial of Zeal*: 1039
+Blink of an Eye*: 989
+Lullmage's Familiar*: 977
+Wrecking Ball*: 989
+Burning Vengeance*: 989
+Falkenrath Celebrants*: 1046
+Mavren Fein, Dusk Apostle*: 996
+Meneldor, Swift Savior*: 1041
+Crawling Sensation*: 996
+Omen of the Sea*: 996
+Roadside Reliquary*: 996
+Yidaro, Wandering Monster*: 996
+So Tiny*: 996
+Hallar, the Firefletcher*: 1038
+Soul Transfer*: 988
+Sadistic Skymarcher*: 988
+Stasis*: 976
+Staggering Insight*: 988
+Seal of Removal*: 988
+Beanstalk Giant // Fertile Footsteps*: 1041
+Beacon Bolt*: 996
+Shoal Kraken*: 996
+Lawmage's Binding*: 996
+Blade Juggler*: 996
+Obzedat's Aid*: 962
+Desperate Ravings*: 1036
+Geothermal Kami*: 986
+Secluded Steppe*: 976
+Brine Giant*: 986
+Burning-Tree Emissary*: 1045
+Twisted Abomination*: 986
+Bloodstone Goblin*: 990
+Stensia Banquet*: 995
+Trial of Solidarity*: 995
+Coldsteel Heart*: 995
+Vineshaper Prodigy*: 995
+Wild-Field Scarecrow*: 1029
+Aviary Mechanic*: 978
+Nomad Outpost*: 948
+Elvish Reclaimer*: 1045
+Faith's Fetters*: 995
+Tinder Wall*: 995
+Wispweaver Angel*: 991
+Fires of Victory*: 984
+Relic Golem*: 995
+Cast Out*: 989
+Wildest Dreams*: 1028
+Shinechaser*: 978
+Dragon's Rage Channeler*: 1045
+Elspeth's Nightmare*: 990
+Urza's Ruinous Blast*: 995
+Bubble Snare*: 1028
+Forsaken Sanctuary*: 974
+Swirling Sandstorm*: 995
+Radical Idea*: 995
+Skizzik*: 995
+Cathartic Reunion*: 1020
+Generous Visitor*: 970
+Urban Utopia*: 1044
+Banishing Light*: 994
+Saproling Migration*: 994
+Blackbloom Rogue // Blackbloom Bog*: 994
+Sanguine Glorifier*: 994
+Thornscape Battlemage*: 990
+Shadow Stinger*: 994
+Zendikar Resurgent*: 1043
+Sunblade Samurai*: 993
+Thunderscape Familiar*: 993
+Corpse Connoisseur*: 973
+Drown in the Loch*: 993
+Ox of Agonas*: 993
+Bishop's Soldier*: 993
+Ioreth of the Healing House*: 1032
+Hooting Mandrills*: 984
+Spark Harvest*: 986
+Wolf of Devil's Breach*: 1060
+Eccentric Farmer*: 953
+Faerie Vandal*: 988
+Mangara of Corondor*: 996
+Lead the Stampede*: 996
+Canyon Slough*: 1034
+Acolyte of Affliction*: 962
+Skophos Reaver*: 978
+World-Weary*: 1001
+Llanowar Mentor*: 984
+Maulfist Revolutionary*: 990
+Court Street Denizen*: 970
+Gorging Vulture*: 986
+Jaxis, the Troublemaker*: 1072
+Kazandu Tuskcaller*: 988
+Irencrag Pyromancer*: 995
+Fractal Summoning*: 983
+Igneous Inspiration*: 1088
+Hagra Mauling // Hagra Broodpit*: 992
+Hunted Wumpus*: 991
+Purphoros, Bronze-Blooded*: 970
+Doom Whisperer*: 995
+Law-Rune Enforcer*: 1028
+Information Dealer*: 948
+Dryad Militant*: 964
+Primal Forcemage*: 991
+Dawnhart Rejuvenator*: 962
+Birds of Paradise*: 995
+Citanul Stalwart*: 990
+Striped Riverwinder*: 983
+Tukatongue Thallid*: 995
+Thundering Rebuke*: 1013
+Balmor, Battlemage Captain*: 958
+Unsummon*: 1030
+Battlewing Mystic*: 1073
+Grisly Survivor*: 985
+Thunderous Snapper*: 981
+Revitalize*: 983
+Release the Dogs*: 993
+Ephemerate*: 1038
+Overgrown Arch*: 983
+Splinter Twin*: 996
+Counterspell*: 989
+Wolfwillow Haven*: 988
+Inspiring Cleric*: 985
+Faith of the Devoted*: 987
+Hell Mongrel*: 987
+Thought Scour*: 1040
+Gird for Battle*: 994
+Seal of Cleansing*: 981
+Biting Rain*: 987
+Agonizing Remorse*: 976
+Dress Down*: 989
+Night Soil*: 995
+Slaying Fire*: 986
+Molten Tributary*: 984
+Upheaval*: 1020
+Spinewoods Armadillo*: 961
+Archmage Emeritus*: 1121
+Pattern of Rebirth*: 995
+Kor Hookmaster*: 986
+Mad Ratter*: 991
+Mystical Tether*: 983
+Ravager Wurm*: 995
+Footfall Crater*: 1039
+Mystical Tutor*: 981
+Violent Outburst*: 976
+Firefist Adept*: 995
+Terminal Agony*: 1058
+Murderous Compulsion*: 980
+Draining Whelk*: 977
+Nekrataal*: 1023
+Lukka, Coppercoat Outcast*: 991
+Demon Bolt*: 996
+Reckless Lackey*: 992
+Spectral Procession*: 967
+Kraul Harpooner*: 959
+Quirion Ranger*: 963
+Lightning Bolt*: 1092
+Frostveil Ambush*: 996
+Lumbering Battlement*: 982
+Heartless Hidetsugu*: 996
+Spore Frog*: 996
+Marketwatch Phantom*: 1038
+Syr Konrad, the Grim*: 988
+Voracious Typhon*: 988
+Cram Session*: 979
+Ghitu Chronicler*: 971
+Angel's Grace*: 975
+Pop Quiz*: 1037
+Necrotic Wound*: 962
+Windborn Muse*: 991
+Flickerform*: 1018
+Winds of Rebuke*: 976
+Tale of Tinúviel*: 980
+Cling to Dust*: 976
+Goldmeadow Harrier*: 982
+Barbed Batterfist*: 996
+Heartless Summoning*: 996
+Greater Tanuki*: 991
+Phyrexian Rager*: 988
+Malfegor*: 988
+Stingerfling Spider*: 977
+Surrak, the Hunt Caller*: 996
+Invoke Justice*: 996
+Grand Warlord Radha*: 979
+Contaminated Aquifer*: 1003
+Charge of the Forever-Beast*: 986
+Alirios, Enraptured*: 1029
+Grisly Salvage*: 995
+Vengeful Reaper*: 995
+Horror of the Broken Lands*: 980
+Reidane, God of the Worthy // Valkmira, Protector's Shield*: 971
+Ahn-Crop Crasher*: 983
+Spellgorger Weird*: 983
+Spitting Earth*: 995
+Chilling Trap*: 1029
+Lesser Masticore*: 1005
+Orcish Lumberjack*: 983
+Alchemist's Greeting*: 986
+Cryptolith Rite*: 990
+Bury in Books*: 990
+Radiant Grove*: 996
+Recruiter of the Guard*: 994
+Footsteps of the Goryo*: 991
+Hunt for Specimens*: 1052
+Eye of the Storm*: 994
+Tromokratis*: 977
+Hypnotic Specter*: 993
+Melira, the Living Cure*: 984
+Molten Monstrosity*: 982
+Grapple with the Past*: 988
+Impassioned Orator*: 996
+Ral's Outburst*: 1027
+Ambush Viper*: 989
+Mirari's Wake*: 979
+Nef-Crop Entangler*: 992
+Drogskol Infantry // Drogskol Armaments*: 988
+Sign in Blood*: 988
+Spotter Thopter*: 987
+Tolarian Terror*: 1027
+Greater Sandwurm*: 983
+Greedy Freebooter*: 983
+Rain of Revelation*: 995
+Brilliant Restoration*: 995
+Devoted Druid*: 995
+Experimental Frenzy*: 1014
+Isochron Scepter*: 1034
+Loyal Pegasus*: 990
+Patient Naturalist*: 989
+Champion of Stray Souls*: 995
+Increasing Savagery*: 987
+Indomitable Creativity*: 995
+Mentor's Guidance*: 994
+Voldaren Epicure*: 994
+Epic Confrontation*: 994
+Shared Summons*: 983
+Recruitment Officer*: 989
+Walk the Aeons*: 993
+Siren Stormtamer*: 992
+Selvala's Stampede*: 985
+Baffling End*: 989
+Bitter Triumph*: 1038
+Frost Trickster*: 993
+Vessel of Nascency*: 972
+Mnemonic Sphere*: 994
+Boneyard Wurm*: 994
+Pyrotechnics*: 1041
+Khalni Ambush // Khalni Territory*: 995
+Winota, Joiner of Forces*: 995
+Caustic Caterpillar*: 966
+Hordeling Outburst*: 1081
+Sifter Wurm*: 981
+Seal Away*: 995
+Fire Servant*: 975
+Satyr Wayfinder*: 970
+Wild Growth*: 995
+Veteran Explorer*: 956
+Necropotence*: 995
+Blue Elemental Blast*: 1033
+Dihada's Ploy*: 972
+Champion of Wits*: 1135
+Decree of Savagery*: 993
+Resurrection*: 990
+Phyrexian Ingester*: 1034
+Ilharg, the Raze-Boar*: 996
+Noose Constrictor*: 996
+Timeless Witness*: 996
+Charging Monstrosaur*: 1022
+Volcano Hellion*: 986
+Glimmerpoint Stag*: 989
+Recalibrate*: 1040
+Ransack the Lab*: 991
+Ruthless Sniper*: 988
+Gnaw to the Bone*: 992
+Mentor of the Meek*: 986
+Ascendant Packleader*: 991
+Gnarled Professor*: 956
+Mnemonic Wall*: 983
+Dreadmalkin*: 991
+Angel of Despair*: 989
+Kabira Crossroads*: 991
+Sram, Senior Edificer*: 992
+Plundering Pirate*: 995
+Read the Bones*: 964
+Naru Meha, Master Wizard*: 1180
+Vivien's Arkbow*: 991
+Codie, Vociferous Codex*: 991
+District Guide*: 995
+Mana Flare*: 970
+Micromancer*: 1044
+Dying to Serve*: 994
+Cultivator of Blades*: 988
+Exalted Angel*: 1039
+Tymaret, Chosen from Death*: 993
+Gisa's Bidding*: 988
+Badlands Revival*: 1046
+Spider Umbra*: 996
+Inspiring Veteran*: 996
+Wishclaw Talisman*: 975
+Akroan Skyguard*: 996
+Toxic Scorpion*: 989
+Servant of the Scale*: 981
+Impulsive Pilferer*: 996
+Seekers' Squire*: 996
+Mask of Immolation*: 996
+Deathbloom Thallid*: 1024
+Grafted Wargear*: 988
+Alesha, Who Smiles at Death*: 988
+Rampant Growth*: 984
+Crop Sigil*: 988
+Syr Carah, the Bold*: 988
+Looter il-Kor*: 996
+Unblinking Bleb*: 996
+Hoarding Broodlord*: 1036
+Aphetto Runecaster*: 986
+Lazotep Reaver*: 986
+Mantle of the Wolf*: 986
+Network Disruptor*: 986
+Kasmina, Enigmatic Mentor*: 1136
+Danitha Capashen, Paragon*: 995
+Another Chance*: 995
+Ninja of the Deep Hours*: 995
+Tome Raider*: 995
+Alseid of Life's Bounty*: 995
+Loathsome Curator*: 979
+Backslide*: 983
+Ride Down*: 983
+Sultai Emissary*: 1045
+Aethermage's Touch*: 995
+Memory's Journey*: 995
+Righteous Valkyrie*: 995
+Icefeather Aven*: 995
+Siona, Captain of the Pyleas*: 995
+Marang River Prowler*: 995
+Pelakka Predation // Pelakka Caverns*: 1014
+Kazuul's Fury // Kazuul's Cliffs*: 978
+Mist-Syndicate Naga*: 1045
+Aerial Guide*: 995
+Hibernation's End*: 995
+Embereth Shieldbreaker // Battle Display*: 995
+Juri, Master of the Revue*: 995
+Sentinel's Eyes*: 995
+Cataclysmic Gearhulk*: 1020
+Concentrate*: 1003
+Urborg Repossession*: 1044
+Flametongue Yearling*: 994
+Chromeshell Crab*: 994
+Wall of Lost Thoughts*: 982
+Vulturous Aven*: 994
+Raff Capashen, Ship's Mage*: 994
+Heliod's Pilgrim*: 994
+Anax, Hardened in the Forge*: 994
+Fury of the Horde*: 991
+Bone Shredder*: 1043
+Illusionist's Stratagem*: 983
+Bonethorn Valesk*: 993
+Karametra's Blessing*: 993
+Scion of the Swarm*: 993
+Geological Appraiser*: 993
+Inscription of Ruin*: 1046
+Pilgrim's Eye*: 1042
+Vicious Offering*: 996
+Eliminate the Impossible*: 996
+Weaponize the Monsters*: 996
+Phyrexian Missionary*: 1039
+Elephant Guide*: 989
+Tibalt's Rager*: 989
+Golgari Germination*: 983
+Skymarch Bloodletter*: 989
+Expedite*: 989
+Pharika's Spawn*: 1043
+Marauding Blight-Priest*: 993
+Radiant Fountain*: 993
+Skittering Surveyor*: 993
+Battlefield Raptor*: 993
+Kambal, Consul of Allocation*: 993
+Tales of Master Seshiro // Seshiro's Living Legacy*: 993
+Vivid Creek*: 993
+Aerial Responder*: 994
+Midnight Reaper*: 994
+Lion Sash*: 994
+Ashiok, Dream Render*: 994
+Stormfist Crusader*: 994
+Preordain*: 1039
+Priest of Ancient Lore*: 994
+Razormane Masticore*: 1072
+Mukotai Ambusher*: 995
+Sixth Sense*: 995
+Mordor Muster*: 995
+Elas il-Kor, Sadistic Pilgrim*: 995
+Setessan Training*: 995
+Tail Swipe*: 1008
+Risona, Asari Commander*: 970
+Soulherder*: 995
+Demonlord of Ashmouth*: 995
+Transcendent Envoy*: 995
+Primal Growth*: 995
+Sift*: 1015
+Sure Strike*: 995
+Reconnaissance Mission*: 1028
+Kwende, Pride of Femeref*: 978
+Scattered Thoughts*: 1045
+Abrade*: 995
+Sultai Soothsayer*: 995
+Glimpse of Tomorrow*: 985
+Rabbit Battery*: 995
+Soul-Guide Lantern*: 1026
+Lucid Dreams*: 995
+Gleancrawler*: 976
+Ravenous Chupacabra*: 1046
+Mogg War Marshal*: 996
+Lampad of Death's Vigil*: 996
+Boseiju Reaches Skyward // Branch of Boseiju*: 1034
+Fight with Fire*: 996
+Shambling Ghast*: 1036
+Heroic Intervention*: 986
+Banehound*: 986
+Primal Whisperer*: 986
+Ixidron*: 1046
+Axgard Armory*: 996
+Eternal Witness*: 996
+Moment of Craving*: 996
+Pine Walker*: 996
+Broodhatch Nantuko*: 996
+Thornwood Falls*: 1038
+Scoured Barrens*: 988
+Reyav, Master Smith*: 988
+Thunderous Orator*: 988
+Rot Shambler*: 983
+Vessel of Paramnesia*: 988
+Ongoing Investigation*: 996
+Relentless Pursuit*: 996
+Adorned Pouncer*: 996
+Dragon Egg*: 996
+Weaver of Lies*: 996
+Fencing Ace*: 996
+Warbriar Blessing*: 989
+Claim the Firstborn*: 996
+Garna, the Bloodflame*: 996
+Burglar Rat*: 996
+Smiting Helix*: 996
+Undying Evil*: 964
+Exit Specialist*: 988
+Silverquill Pledgemage*: 988
+Daring Skyjek*: 988
+Brood Monitor*: 966
+Bontu the Glorified*: 996
+Obscuring Aether*: 996
+Combat Professor*: 990
+Galvanic Arc*: 996
+Evolutionary Leap*: 1036
+Grasp of the Hieromancer*: 986
+Traverse the Ulvenwald*: 986
+Expedition Healer*: 986
+Mindwrack Demon*: 1045
+Forbidden Alchemy*: 995
+Willbender*: 995
+Batterbone*: 995
+Smoke Shroud*: 995
+You Are Already Dead*: 995
+Careless Celebrant*: 983
+Steelclaw Lance*: 983
+Open the Armory*: 983
+Saheeli's Artistry*: 1045
+Venerable Knight*: 995
+Fervent Champion*: 995
+Moon-Circuit Hacker*: 1028
+Traveling Minister*: 978
+Pharika's Mender*: 995
+Dauntless Bodyguard*: 995
+Brackish Trudge*: 995
+Champion of the Flame*: 995
+Nezumi Prowler*: 995
+Titanic Ultimatum*: 995
+Discordant Piper*: 1020
+Upriser Renegade*: 994
+Changeling Outcast*: 994
+Setessan Skirmisher*: 994
+Valduk, Keeper of the Flame*: 994
+Synapse Necromage*: 994
+Serra Ascendant*: 994
+Mind Drain*: 994
+Primal Druid*: 990
+Winding Way*: 993
+Eldritch Evolution*: 988
+Fireblade Charger*: 993
+Captain's Hook*: 993
+Orcish Hellraiser*: 986
+Gilt-Blade Prowler*: 989
+Keening Stone*: 996
+Gloomdrifter*: 982
+Giant's Amulet*: 988
+Irascible Wolverine*: 988
+Blood Curdle*: 996
+Fyndhorn Elder*: 964
+Eladamri's Call*: 983
+Shelter*: 995
+Impulse*: 981
+Aetherflux Reservoir*: 1028
+Thalia, Guardian of Thraben*: 1045
+Nantuko Husk*: 995
+Atzocan Archer*: 983
+Ballynock Trapper*: 994
+Synod Sanctum*: 980
+Kitesail Freebooter*: 989
+Dark Ritual*: 993
+Magmatic Sinkhole*: 988
+Merciless Javelineer*: 987
+Everdream*: 1024
+Civic Wayfinder*: 989
+Split Screen*: 989
+Hateful Eidolon*: 993
+Argothian Opportunist*: 985
+Eldrazi Displacer*: 1044
+Shenanigans*: 990
+Ultimate Price*: 995
+Sarulf's Packmate*: 995
+Strip Mine*: 1089
+Vohar, Vodalian Desecrator*: 995
+The Long Reach of Night // Animus of Night's Reach*: 995
+Trueheart Duelist*: 990
+Song-Mad Treachery // Song-Mad Ruins*: 981
+Thalia's Lancers*: 1046
+From Under the Floorboards*: 1042
+Mistwalker*: 986
+The Ozolith*: 996
+Highland Lake*: 1036
+Thousand-Year Elixir*: 989
+Avacyn's Judgment*: 996
+Niv-Mizzet, the Firemind*: 984
+Vithian Stinger*: 996
+Fake Your Own Death*: 992
+Anointed Procession*: 1036
+Thraben Inspector*: 1045
+Geth, Thane of Contracts*: 988
+Smell Fear*: 979
+Doom Foretold*: 978
+Mycosynth Lattice*: 995
+Labyrinth Guardian*: 1015
+Conjurer's Closet*: 1033
+Annihilate*: 994
+Sower of Temptation*: 1043
+Increasing Ambition*: 993
+Patchwork Automaton*: 1041
+Conclave Tribunal*: 996
+Foundry Helix*: 996
+Treasure Keeper*: 993
+Gravedigger*: 993
+Court Homunculus*: 991
+Valakut Predator*: 996
+Bloom Hulk*: 980
+Power Depot*: 1027
+Lightning Strike*: 983
+Pacification Array*: 972
+Bag of Holding*: 989
+Chrome Courier*: 983
+Bonesplitter*: 1084
+Rustvale Bridge*: 996
+Flameshadow Conjuring*: 996
+Servo Schematic*: 991
+Unlicensed Disintegration*: 985
+Memory Leak*: 990
+Howling Mine*: 1032
+Malcator's Watcher*: 983
+Falkenrath Noble*: 988
+Wayfarer's Bauble*: 1032
+Reality Heist*: 988
+Jackknight*: 1046
+Meteor Golem*: 982
+Poison-Tip Archer*: 996
+Excavation Explosion*: 991
+Master Transmuter*: 992
+Arcbound Prototype*: 996
+Scrap Trawler*: 1036
+Bomat Bazaar Barge*: 982
+Simic Growth Chamber*: 1032
+Once Upon a Time*: 1045
+The Fall of Lord Konda // Fragment of Konda*: 995
+Arcbound Tracker*: 981
+Overgrowth Elemental*: 995
+Salvaging Station*: 1015
+Splicer's Skill*: 995
+Necrogen Spellbomb*: 1021
+Grasp of Darkness*: 1012
+Byway Courier*: 983
+Eyes in the Skies*: 983
+Flickerwisp*: 1091
+Clockwork Servant*: 983
+Jalira, Master Polymorphist*: 995
+Darksteel Citadel*: 995
+Flamekin Bladewhirl*: 995
+Queen Allenal of Ruadach*: 989
+The Antiquities War*: 995
+Splendor Mare*: 1028
+Ichor Wellspring*: 1045
+Energy Refractor*: 989
+Penumbra Spider*: 991
+Riddlesmith*: 995
+Sidisi, Undead Vizier*: 995
+Nurturing Presence*: 984
+Endurance*: 1064
+Vapor Snag*: 970
+Arcbound Shikari*: 1038
+Emergent Sequence*: 994
+Light Up the Stage*: 994
+Untethered Express*: 1023
+Cruel Celebrant*: 990
+Bastion of Remembrance*: 1039
+Vedalken Engineer*: 994
+Izzet Boilerworks*: 1040
+Pia Nalaar*: 1038
+Angler Drake*: 984
+Chief Engineer*: 989
+Profaner of the Dead*: 989
+Biolume Egg // Biolume Serpent*: 981
+Carrier Thrall*: 983
+Etherium Sculptor*: 983
+Galvanic Blast*: 1046
+Slag Strider*: 975
+Target Minotaur*: 996
+Merchant's Dockhand*: 991
+Salivating Gremlins*: 991
+Dusk Rose Reliquary*: 991
+Quicksmith Spy*: 1039
+Mycosynth Wellspring*: 989
+Qarsi High Priest*: 983
+Trumpeting Herd*: 1033
+Golgari Rot Farm*: 1034
+Trusty Machete*: 1033
+Executioner's Capsule*: 981
+Rakdos Carnarium*: 989
+Avacyn's Pilgrim*: 993
+Pacifism*: 993
+Voltage Surge*: 1044
+Scampering Scorcher*: 994
+Pious Evangel // Wayward Disciple*: 994
+Gix's Caress*: 990
+Flower // Flourish*: 994
+Ornithopter*: 994
+Perilous Myr*: 1091
+Dockside Chef*: 995
+Easy Prey*: 995
+Great Furnace*: 995
+Cogworker's Puzzleknot*: 989
+Graveshifter*: 990
+Eyeless Watcher*: 990
+Rusted Relic*: 1020
+Arcanist's Owl*: 970
+Flamekin Harbinger*: 984
+Daybreak Chimera*: 995
+Battle at the Bridge*: 1028
+Mind Stone*: 995
+Metallic Rebuke*: 995
+Lava Serpent*: 965
+Basalt Monolith*: 1018
+Ithilien Kingfisher*: 978
+Venerated Loxodon*: 1091
+Abundant Growth*: 985
+Treasure Map // Treasure Cove*: 1041
+Fecundity*: 991
+Pride of Conquerors*: 995
+Mandible Justiciar*: 995
+Ovalchase Daredevil*: 995
+Thopter Foundry*: 1033
+Phyrexian Vivisector*: 983
+Powerstone Shard*: 977
+Cold Case Cracker*: 977
+Shrapnel Blast*: 1042
+Sage of the Falls*: 990
+Iron Apprentice*: 984
+Enraged Giant*: 996
+Wooded Foothills*: 992
+Briarhorn*: 992
+Searchlight Companion*: 992
+Arcbound Worker*: 1029
+Seat of the Synod*: 986
+Captain's Call*: 986
+Experimental Synthesizer*: 1093
+Silverbluff Bridge*: 996
+Diver Skaab*: 979
+Thopter Spy Network*: 996
+Blossoming Sands*: 996
+Cultivator's Caravan*: 993
+Fire Prophecy*: 1038
+Traveler's Amulet*: 988
+Fatal Push*: 988
+Clone Shell*: 988
+Monoskelion*: 1046
+Scion Summoner*: 996
+Oviya Pashiri, Sage Lifecrafter*: 996
+Rubblehulk*: 996
+Filigree Familiar*: 982
+Mistvault Bridge*: 991
+Repository Skaab*: 996
+Fertilid*: 989
+Marionette Master*: 989
+Pyrite Spellbomb*: 979
+Ulvenwald Mysteries*: 989
+Lashweed Lurker*: 984
+Chief of the Foundry*: 996
+Rabid Bite*: 996
+Weaponcraft Enthusiast*: 996
+Caves of Koilos*: 990
+Leonin Squire*: 1016
+Village Rites*: 976
+Unexpected Results*: 988
+Azorius Chancery*: 988
+Decimator of the Provinces*: 1024
+Pondering Mage*: 988
+Foundry Inspector*: 1046
+Gruul Turf*: 989
+Argivian Cavalier*: 996
+Terrarion*: 982
+Force of Rage*: 996
+Volatile Chimera*: 996
+Magus of the Abyss*: 982
+Transmutation Font*: 980
+Abundant Harvest*: 982
+Cranial Archive*: 986
+Springleaf Drum*: 1039
+Magma Pummeler*: 983
+Anointer Priest*: 995
+Foundation Breaker*: 995
+Farhaven Elf*: 992
+Prophetic Prism*: 991
+Selesnya Sanctuary*: 992
+Mishra's Factory*: 1028
+Valiant Changeling*: 969
+Orzhov Basilica*: 1028
+Pia and Kiran Nalaar*: 1089
+Destructive Tampering*: 995
+Chittering Rats*: 985
+Razaketh's Rite*: 995
+Symmetry Matrix*: 995
+Entish Restoration*: 983
+Orzhov Enforcer*: 995
+Drossforge Bridge*: 1028
+Mother Bear*: 974
+Smokebraider*: 973
+Guild Globe*: 1040
+Nadier, Agent of the Duskenel*: 995
+Karn, the Great Creator*: 995
+Tuskeri Firewalker*: 995
+Might of the Masses*: 995
+Virus Beetle*: 984
+Tezzeret the Schemer*: 995
+Martyr of Dusk*: 1015
+Filigree Attendant*: 966
+It of the Horrid Swarm*: 994
+Sailor of Means*: 989
+Leafkin Druid*: 988
+Padeem, Consul of Innovation*: 991
+Talisman of Dominance*: 977
+Fell Stinger*: 980
+Icy Manipulator*: 1033
+Doomed Traveler*: 993
+Giant Growth*: 993
+Palladium Myr*: 993
+Phyrexia's Core*: 981
+Torrential Gearhulk*: 993
+Rosie Cotton of South Lane*: 990
+Treasure Mage*: 993
+Edifice of Authority*: 996
+Bookwurm*: 996
+Michiko's Reign of Truth // Portrait of Michiko*: 1039
+Spitebellows*: 996
+Generous Stray*: 996
+Clone*: 996
+Maverick Thopterist*: 988
+Masked Vandal*: 996
+Tinker's Tote*: 996
+Caterwauling Boggart*: 996
+Teshar, Ancestor's Apostle*: 996
+Blisterpod*: 1036
+Bannerhide Krushok*: 986
+Boros Garrison*: 1045
+Chromatic Sphere*: 995
+Start // Finish*: 995
+Oni-Cult Anvil*: 995
+Inventor's Goggles*: 995
+Emrakul's Evangel*: 995
+Ravenous Intruder*: 995
+Miner's Guidewing*: 1033
+Implement of Malice*: 983
+Lodestone Golem*: 983
+High-Speed Hoverbike*: 995
+Skilled Animator*: 978
+Vastwood Surge*: 995
+Enthusiastic Mechanaut*: 995
+Sakura-Tribe Elder*: 995
+Maelstrom Colossus*: 1020
+Jaya, Venerated Firemage*: 994
+Summary Judgment*: 994
+Wavesifter*: 993
+Murder Investigation*: 993
+Yavimaya Sapherd*: 993
+Flight Spellbomb*: 993
+Hidden Stockpile*: 993
+Appeal // Authority*: 993
+Sundering Titan*: 1046
+Honey Mammoth*: 996
+Sojourner's Companion*: 996
+Davriel, Rogue Shadowmage*: 996
+Vexing Scuttler*: 996
+Goblin Engineer*: 1043
+Life and Limb*: 993
+Karn, Living Legacy*: 993
+Inspiring Statuary*: 993
+Viscera Seer*: 994
+Into the Roil*: 994
+Mire Triton*: 1045
+Welding Jar*: 995
+Animating Faerie // Bring to Life*: 995
+Creeping Trailblazer*: 995
+Noxious Gearhulk*: 1045
+Grow from the Ashes*: 995
+Arcbound Mouser*: 995
+Deadly Dispute*: 995
+Chart a Course*: 995
+Ornithopter of Paradise*: 995
+Ancient Greenwarden*: 1028
+Ominous Seas*: 975
+Birthing Pod*: 1045
+Vital Splicer*: 995
+Jungle Hollow*: 995
+Booster Tutor*: 995
+Fist of Suns*: 983
+Witching Well*: 996
+Ingenious Smith*: 996
+Trinket Mage*: 1036
+Neoform*: 986
+Arcbound Stinger*: 996
+Squirrel Nest*: 996
+Rhox Veteran*: 996
+Implement of Combustion*: 996
+Grove Rumbler*: 988
+Dimir Aqueduct*: 1046
+Leonin Bola*: 996
+Once and Future*: 996
+Shock*: 996
+Vault Plunderer*: 1039
+Arcbound Slasher*: 989
+Countless Gears Renegade*: 989
+Contraband Kingpin*: 989
+Seismic Wave*: 996
+Pieces of the Puzzle*: 996
+Razortide Bridge*: 996
+Axgard Cavalry*: 996
+Myr Retriever*: 988
+Bound by Moonsilver*: 988
+Grishnákh, Brash Instigator*: 991
+Shadow Summoning*: 996
+Brushfire Elemental*: 996
+Distended Mindbender*: 986
+Simian Sling*: 986
+Ecological Appreciation*: 995
+Twin-Silk Spider*: 995
+Shivan Dragon*: 980
+Burnished Hart*: 995
+Verdant Force*: 995
+Reclusive Artificer*: 1028
+Replication Specialist*: 995
+Evacuation*: 995
+Murder of Crows*: 994
+Worn Powerstone*: 994
+Ancient Den*: 993
+Incubation // Incongruity*: 993
+First-Sphere Gargantua*: 996
+Entomber Exarch*: 989
+Mind's Desire*: 988
+Mogis's Warhound*: 996
+Yawgmoth's Agenda*: 995
+Pilgrim of the Ages*: 995
+Mirari*: 995
+Time of Ice*: 994
+Shark Typhoon*: 1046
+Stitched Mangler*: 996
+Desperate Bloodseeker*: 993
+Liliana of the Veil*: 994
+Cankerbloom*: 994
+Siege-Gang Commander*: 1045
+Errand-Rider of Gondor*: 995
+Bolas's Citadel*: 995
+Whirlpool Drake*: 978
+Gather the Townsfolk*: 988
+Scuttletide*: 1039
+Gamble*: 989
+Windcaller Aven*: 1046
+Torgaar, Famine Incarnate*: 988
+Flame-Blessed Bolt*: 996
+Beast Within*: 996
+Flame Spill*: 1036
+Death Denied*: 986
+Emrakul, the Aeons Torn*: 995
+Oblivion Ring*: 983
+Spikeshot Goblin*: 1028
+Drown in Ichor*: 993
+Paradox Engine*: 993
+Sacred Cat*: 993
+;;

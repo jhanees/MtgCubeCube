@@ -10,6 +10,12 @@ from matplotlib import pyplot
 from matplotlib import axes
 from matplotlib import image
 
+def trueIndex(list,content, startindex = 0):
+    try: 
+        return list.index(content, startindex)
+    except:
+        return -1
+
 #input method which displays prompt + prefill and prefill can be edited on the command line, not compatible with windows
 def rlinput(prompt, prefill=''):
    if(platform.system() == "Windows"):
@@ -95,6 +101,13 @@ def chopItUp(string,separator):
         ind = string.find(separator)
     chopped.append(string)
     return chopped
+
+#calculate elo based on the prior elo and the amount of times a card was picked
+def calcRatings(cardRatings, cardPicks, cardExpectedPicks):
+    for card in cardRatings:
+        cardRatings[card] = cardRatings[card] + 50 * (cardPicks[card] - cardExpectedPicks[card])
+    return cardRatings
+
 #sort archetypes current order:artifacts,monocolor,ally,enemy,shards,wedges,rest
 def sortArchetypes(archetypesUnsorted):
     archetypes = []
@@ -204,6 +217,49 @@ def saveLog(draftLog, players):
         file.write(";;\n")
     file.write(";;;")
     file.close()
+
+def readLog(logname):
+    if(not os.path.exists(f"draftlogs/{logname}")):
+        print("log not found")
+        return [], []
+    else:
+        file = open("draftlogs/" + logname, "r")
+        linesSpace = file.readlines()
+        lines = list(map(dropLastLetter,linesSpace))
+        players = []
+        packs = []
+        ind = trueIndex(lines, "Players:") + 1
+        while not lines[ind].startswith(";"):
+            sepInd = lines[ind].find(": ")
+            if(sepInd != -1):
+                playername = lines[ind][:sepInd]
+                playertype = lines[ind][sepInd+2:]
+                players.append((playername,playertype))
+            ind = ind + 1
+        rind = trueIndex(lines, "Draft Picks:")
+        roundnumber = 0
+        while True:
+            pind = trueIndex(lines, f"Round {roundnumber}:")
+            if pind == -1:
+                break
+            packnumber = 0
+            while not lines[pind].startswith(";;"):
+                prind = trueIndex(lines, f"Pack {packnumber}:", pind)
+                if(prind == -1):
+                    break
+                pack = []
+                while not lines[prind].startswith(";"):
+                    sepInd = lines[prind].find("; ")
+                    if(sepInd != -1):
+                        cardname = lines[prind][:sepInd]
+                        player = lines[prind][sepInd+2:]
+                        pack.append((cardname,player))
+                    prind = prind + 1
+                packs.append(pack)
+                pind = prind
+                packnumber = packnumber + 1
+            roundnumber = roundnumber + 1
+        return players, packs
 
 def saveDeck(playername,deck,sideboard):
     if(not os.path.exists(f"draftdecks/{playername}.dec")):
